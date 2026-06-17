@@ -14,20 +14,39 @@ export default async function BookingDetailPage({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: booking } = await supabase
+  const { data: bookingRaw } = await supabase
     .from("bookings")
     .select("*, procedures(title, category)")
     .eq("reference", params.reference)
     .eq("user_id", user.id)
     .single();
 
-  if (!booking) notFound();
+  if (!bookingRaw) notFound();
+
+  const booking = bookingRaw as typeof bookingRaw & {
+    patient_name: string;
+    patient_email: string;
+    patient_phone: string;
+    preferred_date: string | null;
+    scheduled_date: string | null;
+    notes: string | null;
+    estimated_total: number | null;
+    advance_required: number | null;
+    advance_paid: number | null;
+    balance_due: number | null;
+    reference: string;
+    created_at: string;
+    booking_status: string;
+    payment_status: string;
+    deposit_upload_token: string;
+    procedures?: { title: string; category: string } | null;
+  };
 
   const fields = [
     { label: "Patient Name", value: booking.patient_name },
     { label: "Email", value: booking.patient_email },
     { label: "Phone", value: booking.patient_phone },
-    { label: "Procedure", value: (booking as any).procedures?.title ?? "TBD" },
+    { label: "Procedure", value: booking.procedures?.title ?? "TBD" },
     { label: "Preferred Date", value: booking.preferred_date ?? "Not specified" },
     { label: "Scheduled Date", value: booking.scheduled_date ?? "Pending confirmation" },
     { label: "Notes", value: booking.notes ?? "—" },

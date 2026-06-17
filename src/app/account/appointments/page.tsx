@@ -3,6 +3,11 @@ import { redirect } from "next/navigation";
 import { BookingStatusBadge, PaymentStatusBadge } from "@/components/ui/BookingStatusBadge";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import type { Database } from "@/types/database";
+
+type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
+  procedures: { title: string } | null;
+};
 
 export default async function AppointmentsPage() {
   const supabase = await createClient();
