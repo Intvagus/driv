@@ -5,6 +5,12 @@ import {
   LayoutDashboard, Calendar, Users, Scissors, BookOpen,
   Image, Settings, LogOut, ChevronRight
 } from "lucide-react";
+import type { Database } from "@/types/database";
+
+type AdminUser = Pick<
+  Database["public"]["Tables"]["admin_users"]["Row"],
+  "role" | "email"
+>;
 
 const adminLinks = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -21,13 +27,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirectTo=/admin");
 
-  const { data: adminUser } = await supabase
+  const { data: rawAdminUser } = await supabase
     .from("admin_users")
     .select("role, email")
     .eq("id", user.id)
     .single();
+  const adminUser = rawAdminUser as AdminUser | null;
 
-  if (!adminUser) redirect("/");
+  if (!adminUser) return redirect("/");
 
   return (
     <div className="flex min-h-screen bg-gray-50">

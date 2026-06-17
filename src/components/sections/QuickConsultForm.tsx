@@ -86,7 +86,7 @@ export function QuickConsultForm() {
           )}
         </div>
         <div>
-          <Select onValueChange={(val) => setValue("procedure", val)}>
+          <Select onValueChange={(val: string) => setValue("procedure", val)}>
             <SelectTrigger>
               <SelectValue placeholder="Interested in..." />
             </SelectTrigger>

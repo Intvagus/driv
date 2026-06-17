@@ -3,13 +3,20 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Plus, ArrowRight } from "lucide-react";
+import type { Database } from "@/types/database";
+
+type ProcedureRow = Pick<
+  Database["public"]["Tables"]["procedures"]["Row"],
+  "id" | "title" | "slug" | "category" | "status" | "featured" | "sort_order"
+>;
 
 export default async function AdminProceduresPage() {
   const supabase = await createClient();
-  const { data: procedures } = await supabase
+  const { data: rawProcedures } = await supabase
     .from("procedures")
     .select("id, title, slug, category, status, featured, sort_order")
     .order("sort_order");
+  const procedures = (rawProcedures ?? []) as ProcedureRow[];
 
   return (
     <div className="space-y-6">
@@ -34,7 +41,7 @@ export default async function AdminProceduresPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {procedures?.map((p) => (
+            {procedures.map((p) => (
               <tr key={p.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 font-medium text-brand-dark">{p.title}</td>
                 <td className="px-4 py-3">
@@ -56,7 +63,7 @@ export default async function AdminProceduresPage() {
                 </td>
               </tr>
             ))}
-            {!procedures?.length && (
+            {!procedures.length && (
               <tr>
                 <td colSpan={6} className="px-4 py-12 text-center text-gray-400">
                   No procedures. <Link href="/admin/procedures/new" className="text-brand-gold">Add one</Link>.

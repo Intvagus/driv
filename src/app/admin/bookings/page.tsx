@@ -2,6 +2,11 @@ import { createClient } from "@/lib/supabase/server";
 import { BookingStatusBadge, PaymentStatusBadge } from "@/components/ui/BookingStatusBadge";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import type { Database } from "@/types/database";
+
+type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
+  procedures: { title: string } | null;
+};
 
 export default async function AdminBookingsPage({
   searchParams,
@@ -18,7 +23,8 @@ export default async function AdminBookingsPage({
     query = query.eq("payment_status", searchParams.filter) as typeof query;
   }
 
-  const { data: bookings } = await query;
+  const { data: rawBookings } = await query;
+  const bookings = (rawBookings ?? []) as Booking[];
 
   return (
     <div className="space-y-6">
@@ -59,7 +65,7 @@ export default async function AdminBookingsPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {bookings?.map((b) => (
+              {bookings.map((b) => (
                 <tr key={b.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-mono text-xs text-gray-500">
                     #{String(b.reference).slice(0, 8).toUpperCase()}
@@ -69,7 +75,7 @@ export default async function AdminBookingsPage({
                     <div className="text-gray-500 text-xs">{b.patient_email}</div>
                   </td>
                   <td className="px-4 py-3 text-gray-600">
-                    {(b as any).procedures?.title ?? "TBD"}
+                    {b.procedures?.title ?? "TBD"}
                   </td>
                   <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
                     {b.preferred_date ?? "—"}
@@ -87,7 +93,7 @@ export default async function AdminBookingsPage({
                   </td>
                 </tr>
               ))}
-              {!bookings?.length && (
+              {!bookings.length && (
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center text-gray-400">
                     No bookings found.

@@ -1,12 +1,16 @@
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/Button";
+import type { Database } from "@/types/database";
+
+type SiteSetting = Database["public"]["Tables"]["site_settings"]["Row"];
 
 export default async function AdminSettingsPage() {
   const supabase = await createClient();
-  const { data: settings } = await supabase
+  const { data: rawSettings } = await supabase
     .from("site_settings")
     .select("*")
     .order("key");
+  const settings = (rawSettings ?? []) as SiteSetting[];
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -16,7 +20,7 @@ export default async function AdminSettingsPage() {
           These key-value settings are stored in Supabase and readable by the application.
           Only super admins can modify these values.
         </p>
-        {settings && settings.length > 0 ? (
+        {settings.length > 0 ? (
           <div className="space-y-4">
             {settings.map((s) => (
               <div key={s.id} className="flex items-start gap-4 p-3 bg-gray-50 rounded-lg">

@@ -3,13 +3,20 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Plus, ArrowRight } from "lucide-react";
+import type { Database } from "@/types/database";
+
+type BlogPost = Pick<
+  Database["public"]["Tables"]["blog_posts"]["Row"],
+  "id" | "title" | "slug" | "status" | "author" | "published_at" | "created_at"
+>;
 
 export default async function AdminBlogPage() {
   const supabase = await createClient();
-  const { data: posts } = await supabase
+  const { data: rawPosts } = await supabase
     .from("blog_posts")
     .select("id, title, slug, status, author, published_at, created_at")
     .order("created_at", { ascending: false });
+  const posts = (rawPosts ?? []) as BlogPost[];
 
   return (
     <div className="space-y-6">
@@ -31,7 +38,7 @@ export default async function AdminBlogPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {posts?.map((p) => (
+            {posts.map((p) => (
               <tr key={p.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 font-medium text-brand-dark max-w-xs truncate">{p.title}</td>
                 <td className="px-4 py-3 text-gray-500 font-mono text-xs">{p.slug}</td>
@@ -49,7 +56,7 @@ export default async function AdminBlogPage() {
                 </td>
               </tr>
             ))}
-            {!posts?.length && (
+            {!posts.length && (
               <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400">No posts yet.</td></tr>
             )}
           </tbody>

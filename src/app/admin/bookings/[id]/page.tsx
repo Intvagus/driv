@@ -5,16 +5,22 @@ import { BookingStatusBadge, PaymentStatusBadge } from "@/components/ui/BookingS
 import { Button } from "@/components/ui/Button";
 import { ConfirmAdvanceButton } from "./ConfirmAdvanceButton";
 import { ExternalLink } from "lucide-react";
+import type { Database } from "@/types/database";
+
+type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
+  procedures: { title: string } | null;
+};
 
 export default async function AdminBookingDetailPage({ params }: { params: { id: string } }) {
   const supabase = await createClient();
-  const { data: booking } = await supabase
+  const { data: rawBooking } = await supabase
     .from("bookings")
     .select("*, procedures(title)")
     .eq("id", params.id)
     .single();
+  const booking = rawBooking as Booking | null;
 
-  if (!booking) notFound();
+  if (!booking) return notFound();
 
   // Generate signed URL for payment proof if exists
   let proofSignedUrl: string | null = null;
@@ -32,7 +38,7 @@ export default async function AdminBookingDetailPage({ params }: { params: { id:
     { label: "Email", value: booking.patient_email },
     { label: "Phone", value: booking.patient_phone },
     { label: "WhatsApp", value: booking.patient_whatsapp ?? "—" },
-    { label: "Procedure", value: (booking as any).procedures?.title ?? "TBD" },
+    { label: "Procedure", value: booking.procedures?.title ?? "TBD" },
     { label: "Preferred Date", value: booking.preferred_date ?? "—" },
     { label: "Scheduled Date", value: booking.scheduled_date ?? "Not set" },
     { label: "Notes", value: booking.notes ?? "—" },

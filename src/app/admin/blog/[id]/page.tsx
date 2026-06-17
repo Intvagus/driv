@@ -6,6 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
+import type { Database } from "@/types/database";
+
+type BlogPost = Database["public"]["Tables"]["blog_posts"]["Row"];
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
@@ -39,7 +42,8 @@ export default function AdminBlogEditPage() {
   useEffect(() => {
     if (isNew) return;
     const supabase = createClient();
-    supabase.from("blog_posts").select("*").eq("id", params.id).single().then(({ data }) => {
+    supabase.from("blog_posts").select("*").eq("id", params.id).single().then((result: { data: unknown }) => {
+      const data = result.data as BlogPost | null;
       if (data) reset({
         title: data.title,
         slug: data.slug,
@@ -94,7 +98,7 @@ export default function AdminBlogEditPage() {
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600 block mb-1">Status</label>
-            <Select defaultValue="draft" onValueChange={(v) => setValue("status", v as "draft" | "published")}>
+            <Select defaultValue="draft" onValueChange={(v: string) => setValue("status", v as "draft" | "published")}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="draft">Draft</SelectItem>

@@ -1,5 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/Badge";
+import type { Database } from "@/types/database";
+
+type Lead = Database["public"]["Tables"]["consultation_leads"]["Row"];
 
 const statusVariant: Record<string, "default" | "success" | "warning" | "error" | "info" | "secondary"> = {
   new: "info",
@@ -24,7 +27,8 @@ export default async function AdminLeadsPage({
     query = query.eq("status", searchParams.filter) as typeof query;
   }
 
-  const { data: leads } = await query;
+  const { data: rawLeads } = await query;
+  const leads = (rawLeads ?? []) as Lead[];
 
   return (
     <div className="space-y-6">
@@ -43,7 +47,7 @@ export default async function AdminLeadsPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {leads?.map((l) => (
+              {leads.map((l) => (
                 <tr key={l.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium text-brand-dark">{l.name}</td>
                   <td className="px-4 py-3 text-gray-600">{l.email}</td>
@@ -61,7 +65,7 @@ export default async function AdminLeadsPage({
                   </td>
                 </tr>
               ))}
-              {!leads?.length && (
+              {!leads.length && (
                 <tr>
                   <td colSpan={8} className="px-4 py-12 text-center text-gray-400">No leads found.</td>
                 </tr>

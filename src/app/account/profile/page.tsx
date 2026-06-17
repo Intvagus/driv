@@ -14,7 +14,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    supabase.auth.getUser().then((res) => setUser(res.data.user));
   }, []);
 
   const handleSignOut = async () => {

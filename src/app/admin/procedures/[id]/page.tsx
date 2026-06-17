@@ -6,6 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
+import type { Database } from "@/types/database";
+
+type Procedure = Database["public"]["Tables"]["procedures"]["Row"];
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
@@ -43,7 +46,8 @@ export default function AdminProcedureEditPage() {
   useEffect(() => {
     if (isNew) return;
     const supabase = createClient();
-    supabase.from("procedures").select("*").eq("id", params.id).single().then(({ data }) => {
+    supabase.from("procedures").select("*").eq("id", params.id).single().then((result: { data: unknown }) => {
+      const data = result.data as Procedure | null;
       if (data) {
         reset({
           title: data.title,
@@ -99,7 +103,7 @@ export default function AdminProcedureEditPage() {
         <div className="grid sm:grid-cols-3 gap-4">
           <div>
             <label className="text-xs font-medium text-gray-600 block mb-1">Category *</label>
-            <Select defaultValue="surgical" onValueChange={(v) => setValue("category", v as "surgical" | "non_surgical")}>
+            <Select defaultValue="surgical" onValueChange={(v: string) => setValue("category", v as "surgical" | "non_surgical")}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="surgical">Surgical</SelectItem>
@@ -109,7 +113,7 @@ export default function AdminProcedureEditPage() {
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600 block mb-1">Status *</label>
-            <Select defaultValue="draft" onValueChange={(v) => setValue("status", v as "draft" | "published" | "archived")}>
+            <Select defaultValue="draft" onValueChange={(v: string) => setValue("status", v as "draft" | "published" | "archived")}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="draft">Draft</SelectItem>

@@ -164,7 +164,7 @@ export default function BookPage() {
                 <form onSubmit={handleStep1} className="space-y-5">
                   <h2 className="font-serif font-bold text-brand-dark text-xl">Select Procedure</h2>
                   <div>
-                    <Select onValueChange={(v) => step1.setValue("procedure", v)}>
+                    <Select onValueChange={(v: string) => step1.setValue("procedure", v)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Choose a procedure..." />
                       </SelectTrigger>

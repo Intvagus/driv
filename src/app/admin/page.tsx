@@ -1,6 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Calendar, Users, FileText, Image, ArrowRight, AlertCircle } from "lucide-react";
+import type { Database } from "@/types/database";
+
+type BookingRow = Pick<
+  Database["public"]["Tables"]["bookings"]["Row"],
+  "id" | "patient_name" | "patient_email" | "payment_status" | "created_at"
+> & { procedures: { title: string } | null };
+
+type LeadRow = Pick<
+  Database["public"]["Tables"]["consultation_leads"]["Row"],
+  "id" | "name" | "email" | "status" | "created_at"
+>;
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
@@ -80,14 +91,15 @@ export default async function AdminDashboardPage() {
 
 async function RecentBookings() {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data: rawData } = await supabase
     .from("bookings")
     .select("id, patient_name, patient_email, payment_status, created_at, procedures(title)")
     .eq("payment_status", "deposit_submitted")
     .order("created_at", { ascending: false })
     .limit(5);
+  const data = (rawData ?? []) as BookingRow[];
 
-  if (!data?.length) return <div className="p-6 text-gray-400 text-sm text-center">No pending reviews.</div>;
+  if (!data.length) return <div className="p-6 text-gray-400 text-sm text-center">No pending reviews.</div>;
 
   return (
     <div className="divide-y divide-gray-100">
@@ -95,7 +107,7 @@ async function RecentBookings() {
         <Link key={b.id} href={`/admin/bookings/${b.id}`} className="flex items-center justify-between p-4 hover:bg-gray-50 text-sm">
           <div>
             <div className="font-medium text-brand-dark">{b.patient_name}</div>
-            <div className="text-gray-500 text-xs">{(b as any).procedures?.title}</div>
+            <div className="text-gray-500 text-xs">{b.procedures?.title}</div>
           </div>
           <ArrowRight className="h-4 w-4 text-gray-400" />
         </Link>
@@ -106,14 +118,15 @@ async function RecentBookings() {
 
 async function RecentLeads() {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data: rawLeads } = await supabase
     .from("consultation_leads")
     .select("id, name, email, status, created_at")
     .eq("status", "new")
     .order("created_at", { ascending: false })
     .limit(5);
+  const data = (rawLeads ?? []) as LeadRow[];
 
-  if (!data?.length) return <div className="p-6 text-gray-400 text-sm text-center">No new leads.</div>;
+  if (!data.length) return <div className="p-6 text-gray-400 text-sm text-center">No new leads.</div>;
 
   return (
     <div className="divide-y divide-gray-100">

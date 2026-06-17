@@ -119,7 +119,7 @@ export default function ConsultationPage() {
               <h3 className="font-semibold text-brand-dark pt-2">Hair Loss Details</h3>
 
               <div className="grid sm:grid-cols-2 gap-4">
-                <Select onValueChange={(v) => setValue("norwood_stage", v)}>
+                <Select onValueChange={(v: string) => setValue("norwood_stage", v)}>
                   <SelectTrigger><SelectValue placeholder="Norwood Stage (if known)" /></SelectTrigger>
                   <SelectContent>
                     {NORWOOD_STAGES.map((s) => (
@@ -128,7 +128,7 @@ export default function ConsultationPage() {
                     <SelectItem value="Not sure">Not sure</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select onValueChange={(v) => setValue("preferred_technique", v)}>
+                <Select onValueChange={(v: string) => setValue("preferred_technique", v)}>
                   <SelectTrigger><SelectValue placeholder="Preferred Procedure" /></SelectTrigger>
                   <SelectContent>
                     {PROCEDURES.map((p) => (
@@ -143,7 +143,7 @@ export default function ConsultationPage() {
                 <Input placeholder="Affected areas (e.g. crown, temples, entire scalp)" {...register("hair_loss_area")} />
               </div>
 
-              <Select onValueChange={(v) => setValue("budget", v)}>
+              <Select onValueChange={(v: string) => setValue("budget", v)}>
                 <SelectTrigger><SelectValue placeholder="Approximate Budget (PKR)" /></SelectTrigger>
                 <SelectContent>
                   {["Under 100,000", "100,000 – 200,000", "200,000 – 350,000", "350,000+", "Flexible"].map((b) => (
