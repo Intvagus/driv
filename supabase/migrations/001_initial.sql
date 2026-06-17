@@ -4,27 +4,47 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- ============================================================
 -- ENUMS
 -- ============================================================
-CREATE TYPE procedure_category AS ENUM ('surgical', 'non_surgical');
-CREATE TYPE procedure_status AS ENUM ('draft', 'published', 'archived');
-CREATE TYPE booking_status AS ENUM ('awaiting_deposit', 'confirmed', 'cancelled', 'completed');
-CREATE TYPE payment_status AS ENUM (
-  'deposit_pending',
-  'deposit_submitted',
-  'deposit_confirmed',
-  'deposit_rejected',
-  'balance_pending',
-  'fully_paid'
-);
-CREATE TYPE lead_status AS ENUM ('new', 'contacted', 'quoted', 'converted', 'lost');
-CREATE TYPE blog_status AS ENUM ('draft', 'published');
-CREATE TYPE admin_role AS ENUM (
-  'super_admin',
-  'content_editor',
-  'procedure_manager',
-  'patient_coordinator',
-  'finance_admin',
-  'clinical_coordinator'
-);
+DO $$ BEGIN
+  CREATE TYPE procedure_category AS ENUM ('surgical', 'non_surgical');
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE TYPE procedure_status AS ENUM ('draft', 'published', 'archived');
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE TYPE booking_status AS ENUM ('awaiting_deposit', 'confirmed', 'cancelled', 'completed');
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE TYPE payment_status AS ENUM (
+    'deposit_pending',
+    'deposit_submitted',
+    'deposit_confirmed',
+    'deposit_rejected',
+    'balance_pending',
+    'fully_paid'
+  );
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE TYPE lead_status AS ENUM ('new', 'contacted', 'quoted', 'converted', 'lost');
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE TYPE blog_status AS ENUM ('draft', 'published');
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  CREATE TYPE admin_role AS ENUM (
+    'super_admin',
+    'content_editor',
+    'procedure_manager',
+    'patient_coordinator',
+    'finance_admin',
+    'clinical_coordinator'
+  );
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- ============================================================
 -- TABLES
