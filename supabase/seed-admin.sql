@@ -2,4 +2,4 @@
 -- Replace the placeholder values with actual user ID and email.
 
 -- INSERT INTO admin_users (id, email, role)
--- VALUES ('<your-auth-user-id>', 'your@email.com', 'super_admin');
+-- VALUES ('<shuaib40>', 'shuaib40@mail.com', 'super_admin');
