@@ -14,18 +14,19 @@ export default async function AppointmentsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: bookings } = await supabase
+  const { data: rawBookings } = await supabase
     .from("bookings")
     .select("*, procedures(title)")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
+  const bookings = (rawBookings ?? []) as Booking[];
 
   return (
     <div className="bg-white rounded-xl border border-gray-200">
       <div className="p-5 border-b border-gray-100">
         <h2 className="font-semibold text-brand-dark">All Appointments</h2>
       </div>
-      {bookings && bookings.length > 0 ? (
+      {bookings.length > 0 ? (
         <div className="divide-y divide-gray-100">
           {bookings.map((booking) => (
             <Link
@@ -35,7 +36,7 @@ export default async function AppointmentsPage() {
             >
               <div>
                 <div className="font-medium text-brand-dark">
-                  {(booking as any).procedures?.title ?? "Procedure TBD"}
+                  {booking.procedures?.title ?? "Procedure TBD"}
                 </div>
                 <div className="text-gray-500 text-xs mt-0.5">
                   Ref: {String(booking.reference).slice(0, 8).toUpperCase()} · Booked{" "}
