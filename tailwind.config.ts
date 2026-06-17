@@ -26,6 +26,20 @@ const config: Config = {
         "gradient-brand": "linear-gradient(135deg, #15323F 0%, #1e4a5c 100%)",
         "gradient-gold": "linear-gradient(135deg, #C8A45D 0%, #d4b67a 100%)",
       },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
