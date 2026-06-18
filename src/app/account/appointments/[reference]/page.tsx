@@ -29,7 +29,9 @@ export default async function BookingDetailPage({
     patient_phone: string; preferred_date: string | null; scheduled_date: string | null;
     notes: string | null; estimated_total: number | null; advance_required: number | null;
     advance_paid: number | null; balance_due: number | null; created_at: string;
-    booking_status: string; payment_status: string; deposit_upload_token: string;
+    booking_status: "awaiting_deposit" | "confirmed" | "cancelled" | "completed";
+    payment_status: "deposit_pending" | "deposit_submitted" | "deposit_confirmed" | "deposit_rejected" | "balance_pending" | "fully_paid";
+    deposit_upload_token: string;
     procedures: { title: string; category: string } | null;
   };
 
