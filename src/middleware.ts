@@ -1,5 +1,4 @@
 import { createServerClient } from "@supabase/ssr";
-import { createClient } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
@@ -19,9 +18,7 @@ export async function middleware(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          supabaseResponse = NextResponse.next({
-            request,
-          });
+          supabaseResponse = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           );
@@ -30,13 +27,10 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
 
-  // Protect /account/* routes - require authentication
   if (pathname.startsWith("/account")) {
     if (!user) {
       const url = request.nextUrl.clone();
@@ -46,7 +40,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Protect /admin/* routes - require admin role
   if (pathname.startsWith("/admin")) {
     if (!user) {
       const url = request.nextUrl.clone();
@@ -55,14 +48,19 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // Use service role to bypass RLS for admin check
-    const adminClient = createClient(
+    // Use service role key via createServerClient (Edge-compatible)
+    const adminSupabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      { auth: { autoRefreshToken: false, persistSession: false } }
+      {
+        cookies: {
+          getAll() { return []; },
+          setAll() {},
+        },
+      }
     );
 
-    const { data: adminUser } = await adminClient
+    const { data: adminUser } = await adminSupabase
       .from("admin_users")
       .select("id")
       .eq("id", user.id)
