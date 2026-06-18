@@ -13,7 +13,7 @@ type Booking = Database["public"]["Tables"]["bookings"]["Row"] & {
 export default async function AccountPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) return redirect("/login") as never;
 
   const { data: rawBookings } = await supabase
     .from("bookings")

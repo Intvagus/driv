@@ -12,35 +12,16 @@ export default async function BookingDetailPage({
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) return redirect("/login") as never;
 
-  const { data: bookingRaw } = await supabase
+  const { data: booking } = await supabase
     .from("bookings")
     .select("*, procedures(title, category)")
     .eq("reference", params.reference)
     .eq("user_id", user.id)
     .single();
 
-  if (!bookingRaw) notFound();
-
-  const booking = bookingRaw as typeof bookingRaw & {
-    patient_name: string;
-    patient_email: string;
-    patient_phone: string;
-    preferred_date: string | null;
-    scheduled_date: string | null;
-    notes: string | null;
-    estimated_total: number | null;
-    advance_required: number | null;
-    advance_paid: number | null;
-    balance_due: number | null;
-    reference: string;
-    created_at: string;
-    booking_status: string;
-    payment_status: string;
-    deposit_upload_token: string;
-    procedures?: { title: string; category: string } | null;
-  };
+  if (!booking) return notFound();
 
   const fields = [
     { label: "Patient Name", value: booking.patient_name },

@@ -263,6 +263,36 @@ export type Database = {
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
+    Relationships: [
+      {
+        foreignKeyName: "bookings_procedure_id_fkey";
+        columns: ["procedure_id"];
+        isOneToOne: false;
+        referencedRelation: "procedures";
+        referencedColumns: ["id"];
+      },
+      {
+        foreignKeyName: "before_after_gallery_procedure_id_fkey";
+        columns: ["procedure_id"];
+        isOneToOne: false;
+        referencedRelation: "procedures";
+        referencedColumns: ["id"];
+      },
+      {
+        foreignKeyName: "testimonials_procedure_id_fkey";
+        columns: ["procedure_id"];
+        isOneToOne: false;
+        referencedRelation: "procedures";
+        referencedColumns: ["id"];
+      },
+      {
+        foreignKeyName: "booking_reminders_booking_id_fkey";
+        columns: ["booking_id"];
+        isOneToOne: false;
+        referencedRelation: "bookings";
+        referencedColumns: ["id"];
+      }
+    ];
     Enums: {
       procedure_category: "surgical" | "non_surgical";
       procedure_status: "draft" | "published" | "archived";

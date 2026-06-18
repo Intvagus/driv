@@ -25,7 +25,7 @@ const adminLinks = [
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login?redirectTo=/admin");
+  if (!user) return redirect("/login?redirectTo=/admin") as never;
 
   const { data: rawAdminUser } = await supabase
     .from("admin_users")
