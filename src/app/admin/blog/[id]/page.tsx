@@ -63,12 +63,14 @@ export default function AdminBlogEditPage() {
     const payload = {
       ...data,
       published_at: data.status === "published" ? new Date().toISOString() : null,
-    };
+    } as Database["public"]["Tables"]["blog_posts"]["Insert"];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const table = supabase.from("blog_posts") as any;
     if (isNew) {
-      const { error } = await supabase.from("blog_posts").insert([payload]);
+      const { error } = await table.insert([payload]);
       if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
     } else {
-      const { error } = await supabase.from("blog_posts").update(payload).eq("id", params.id as string);
+      const { error } = await table.update(payload).eq("id", params.id as string);
       if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
     }
     toast({ title: "Saved!", variant: "success" });
