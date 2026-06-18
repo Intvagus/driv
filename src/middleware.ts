@@ -31,6 +31,7 @@ export async function middleware(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
+  // Protect /account routes - must be logged in
   if (pathname.startsWith("/account")) {
     if (!user) {
       const url = request.nextUrl.clone();
@@ -40,35 +41,12 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Protect /admin routes - must be logged in (role check done in layout)
   if (pathname.startsWith("/admin")) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
       url.searchParams.set("redirectTo", pathname);
-      return NextResponse.redirect(url);
-    }
-
-    // Use service role key via createServerClient (Edge-compatible)
-    const adminSupabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        cookies: {
-          getAll() { return []; },
-          setAll() {},
-        },
-      }
-    );
-
-    const { data: adminUser } = await adminSupabase
-      .from("admin_users")
-      .select("id")
-      .eq("id", user.id)
-      .single();
-
-    if (!adminUser) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/";
       return NextResponse.redirect(url);
     }
   }

@@ -36,7 +36,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .single();
   const adminUser = rawAdminUser as AdminUser | null;
 
-  if (!adminUser) return redirect("/");
+  if (!adminUser) return redirect("/login?error=not_admin") as never;
 
   return (
     <div className="flex min-h-screen bg-gray-50">
