@@ -20,39 +20,33 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-
     const adminClient = createAdminClient();
 
-    // Look up procedure by title to get its ID
     const { data: procedure } = await adminClient
       .from("procedures")
       .select("id, advance_amount, price_per_graft")
       .eq("title", data.procedure)
       .single();
 
-    const { data: booking, error } = await adminClient
-      .from("bookings")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: booking, error } = await (adminClient.from("bookings") as any)
       .insert({
         patient_name: data.patient_name,
         patient_email: data.patient_email,
         patient_phone: data.patient_phone,
         patient_whatsapp: data.patient_whatsapp || null,
-        procedure_id: procedure?.id || null,
+        procedure_id: (procedure as any)?.id || null,
         preferred_date: data.preferred_date || null,
         notes: data.notes || null,
         user_id: user?.id || null,
         booking_status: "awaiting_deposit",
         payment_status: "deposit_pending",
-        advance_required: procedure?.advance_amount || null,
+        advance_required: (procedure as any)?.advance_amount || null,
       })
       .select("reference, deposit_upload_token")
       .single();
 
-    if (error) {
-      console.error("Booking insert error:", error);
-      return NextResponse.json({ error: "Failed to create booking" }, { status: 500 });
-    }
-
+    if (error) return NextResponse.json({ error: "Failed to create booking" }, { status: 500 });
     return NextResponse.json(booking, { status: 201 });
   } catch (err) {
     if (err instanceof z.ZodError) {

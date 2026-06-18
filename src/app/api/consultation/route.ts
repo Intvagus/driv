@@ -18,22 +18,18 @@ const leadSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     let data: Record<string, string> = {};
-
     const contentType = request.headers.get("content-type") ?? "";
     if (contentType.includes("multipart/form-data")) {
       const formData = await request.formData();
-      formData.forEach((value, key) => {
-        if (typeof value === "string") data[key] = value;
-      });
-      // Handle photo upload separately if needed
+      formData.forEach((value, key) => { if (typeof value === "string") data[key] = value; });
     } else {
       data = await request.json();
     }
 
     const validated = leadSchema.parse(data);
-
     const adminClient = createAdminClient();
-    const { error } = await adminClient.from("consultation_leads").insert({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (adminClient.from("consultation_leads") as any).insert({
       name: validated.name,
       email: validated.email || `noemail_${Date.now()}@placeholder.com`,
       phone: validated.phone,
@@ -46,11 +42,7 @@ export async function POST(request: NextRequest) {
       status: "new",
     });
 
-    if (error) {
-      console.error("Lead insert error:", error);
-      return NextResponse.json({ error: "Failed to submit" }, { status: 500 });
-    }
-
+    if (error) return NextResponse.json({ error: "Failed to submit" }, { status: 500 });
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (err) {
     if (err instanceof z.ZodError) {
