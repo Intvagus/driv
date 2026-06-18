@@ -14,14 +14,24 @@ export default async function BookingDetailPage({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return redirect("/login") as never;
 
-  const { data: booking } = await supabase
+  const { data: rawBooking } = await supabase
     .from("bookings")
     .select("*, procedures(title, category)")
     .eq("reference", params.reference)
     .eq("user_id", user.id)
     .single();
 
-  if (!booking) return notFound();
+  if (!rawBooking) return notFound();
+
+  // Cast needed because Supabase join queries require Relationships in DB type
+  const booking = rawBooking as unknown as {
+    id: string; reference: string; patient_name: string; patient_email: string;
+    patient_phone: string; preferred_date: string | null; scheduled_date: string | null;
+    notes: string | null; estimated_total: number | null; advance_required: number | null;
+    advance_paid: number | null; balance_due: number | null; created_at: string;
+    booking_status: string; payment_status: string; deposit_upload_token: string;
+    procedures: { title: string; category: string } | null;
+  };
 
   const fields = [
     { label: "Patient Name", value: booking.patient_name },

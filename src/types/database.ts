@@ -50,6 +50,15 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["procedures"]["Insert"]>;
       };
       bookings: {
+        Relationships: [
+          {
+            foreignKeyName: "bookings_procedure_id_fkey";
+            columns: ["procedure_id"];
+            isOneToOne: false;
+            referencedRelation: "procedures";
+            referencedColumns: ["id"];
+          }
+        ];
         Row: {
           id: string;
           reference: string;
@@ -150,6 +159,15 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["blog_posts"]["Insert"]>;
       };
       before_after_gallery: {
+        Relationships: [
+          {
+            foreignKeyName: "before_after_gallery_procedure_id_fkey";
+            columns: ["procedure_id"];
+            isOneToOne: false;
+            referencedRelation: "procedures";
+            referencedColumns: ["id"];
+          }
+        ];
         Row: {
           id: string;
           procedure_id: string | null;
@@ -174,6 +192,15 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["before_after_gallery"]["Insert"]>;
       };
       testimonials: {
+        Relationships: [
+          {
+            foreignKeyName: "testimonials_procedure_id_fkey";
+            columns: ["procedure_id"];
+            isOneToOne: false;
+            referencedRelation: "procedures";
+            referencedColumns: ["id"];
+          }
+        ];
         Row: {
           id: string;
           patient_name: string;
@@ -212,6 +239,15 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["team_members"]["Insert"]>;
       };
       booking_reminders: {
+        Relationships: [
+          {
+            foreignKeyName: "booking_reminders_booking_id_fkey";
+            columns: ["booking_id"];
+            isOneToOne: false;
+            referencedRelation: "bookings";
+            referencedColumns: ["id"];
+          }
+        ];
         Row: {
           id: string;
           booking_id: string;
@@ -263,36 +299,6 @@ export type Database = {
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
-    Relationships: [
-      {
-        foreignKeyName: "bookings_procedure_id_fkey";
-        columns: ["procedure_id"];
-        isOneToOne: false;
-        referencedRelation: "procedures";
-        referencedColumns: ["id"];
-      },
-      {
-        foreignKeyName: "before_after_gallery_procedure_id_fkey";
-        columns: ["procedure_id"];
-        isOneToOne: false;
-        referencedRelation: "procedures";
-        referencedColumns: ["id"];
-      },
-      {
-        foreignKeyName: "testimonials_procedure_id_fkey";
-        columns: ["procedure_id"];
-        isOneToOne: false;
-        referencedRelation: "procedures";
-        referencedColumns: ["id"];
-      },
-      {
-        foreignKeyName: "booking_reminders_booking_id_fkey";
-        columns: ["booking_id"];
-        isOneToOne: false;
-        referencedRelation: "bookings";
-        referencedColumns: ["id"];
-      }
-    ];
     Enums: {
       procedure_category: "surgical" | "non_surgical";
       procedure_status: "draft" | "published" | "archived";
