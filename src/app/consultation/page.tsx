@@ -34,9 +34,11 @@ export default function ConsultationPage() {
   const [photo, setPhoto] = useState<File | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const photoRef = useRef<HTMLInputElement>(null);
-  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
+  const { register, handleSubmit, setValue, formState: { errors: rawErrors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const errors = rawErrors as any;
 
   const onSubmit = async (data: FormData) => {
     try {

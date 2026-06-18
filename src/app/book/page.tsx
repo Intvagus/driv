@@ -54,6 +54,12 @@ export default function BookPage() {
   const step1 = useForm({ resolver: zodResolver(step1Schema) });
   const step2 = useForm({ resolver: zodResolver(step2Schema) });
   const step3 = useForm({ resolver: zodResolver(step3Schema) });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const e1 = step1.formState.errors as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const e2 = step2.formState.errors as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const e3 = step3.formState.errors as any;
 
   const handleStep1 = step1.handleSubmit((data) => {
     setFormData((prev) => ({ ...prev, ...data }));
@@ -175,8 +181,8 @@ export default function BookPage() {
                         <SelectItem value="Not sure - need advice">Not sure – need advice</SelectItem>
                       </SelectContent>
                     </Select>
-                    {step1.formState.errors.procedure && (
-                      <p className="text-red-500 text-xs mt-1">{step1.formState.errors.procedure?.message as string ?? ""}</p>
+                    {e1.procedure && (
+                      <p className="text-red-500 text-xs mt-1">{e1.procedure?.message as string ?? ""}</p>
                     )}
                   </div>
                   <Button type="submit" className="w-full" variant="primary" size="lg">
@@ -191,15 +197,15 @@ export default function BookPage() {
                   <h2 className="font-serif font-bold text-brand-dark text-xl">Your Details</h2>
                   <div>
                     <Input placeholder="Full Name" {...step2.register("patient_name")} />
-                    {step2.formState.errors.patient_name && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_name?.message as string ?? ""}</p>}
+                    {e2.patient_name && <p className="text-red-500 text-xs mt-1">{e2.patient_name?.message as string ?? ""}</p>}
                   </div>
                   <div>
                     <Input type="email" placeholder="Email Address" {...step2.register("patient_email")} />
-                    {step2.formState.errors.patient_email && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_email?.message as string ?? ""}</p>}
+                    {e2.patient_email && <p className="text-red-500 text-xs mt-1">{e2.patient_email?.message as string ?? ""}</p>}
                   </div>
                   <div>
                     <Input placeholder="Phone Number" {...step2.register("patient_phone")} />
-                    {step2.formState.errors.patient_phone && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_phone?.message as string ?? ""}</p>}
+                    {e2.patient_phone && <p className="text-red-500 text-xs mt-1">{e2.patient_phone?.message as string ?? ""}</p>}
                   </div>
                   <div>
                     <Input placeholder="WhatsApp Number (if different)" {...step2.register("patient_whatsapp")} />
@@ -221,7 +227,7 @@ export default function BookPage() {
                       min={new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0]}
                       {...step3.register("preferred_date")}
                     />
-                    {step3.formState.errors.preferred_date && <p className="text-red-500 text-xs mt-1">{step3.formState.errors.preferred_date?.message as string ?? ""}</p>}
+                    {e3.preferred_date && <p className="text-red-500 text-xs mt-1">{e3.preferred_date?.message as string ?? ""}</p>}
                   </div>
                   <div>
                     <Textarea placeholder="Any additional notes, questions, or medical information..." rows={4} {...step3.register("notes")} />
