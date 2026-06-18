@@ -98,7 +98,7 @@ export default function ConsultationPage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <Input placeholder="Full Name *" {...register("name")} />
-                  {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+                  {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name?.message as string ?? ""}</p>}
                 </div>
                 <div>
                   <Input placeholder="Age" type="number" {...register("age")} />
@@ -108,11 +108,11 @@ export default function ConsultationPage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <Input type="email" placeholder="Email Address *" {...register("email")} />
-                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email?.message as string ?? ""}</p>}
                 </div>
                 <div>
                   <Input placeholder="Phone / WhatsApp *" {...register("phone")} />
-                  {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
+                  {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone?.message as string ?? ""}</p>}
                 </div>
               </div>
 

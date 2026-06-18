@@ -176,7 +176,7 @@ export default function BookPage() {
                       </SelectContent>
                     </Select>
                     {step1.formState.errors.procedure && (
-                      <p className="text-red-500 text-xs mt-1">{step1.formState.errors.procedure?.message ?? ""}</p>
+                      <p className="text-red-500 text-xs mt-1">{step1.formState.errors.procedure?.message as string ?? ""}</p>
                     )}
                   </div>
                   <Button type="submit" className="w-full" variant="primary" size="lg">
@@ -191,15 +191,15 @@ export default function BookPage() {
                   <h2 className="font-serif font-bold text-brand-dark text-xl">Your Details</h2>
                   <div>
                     <Input placeholder="Full Name" {...step2.register("patient_name")} />
-                    {step2.formState.errors.patient_name && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_name?.message ?? ""}</p>}
+                    {step2.formState.errors.patient_name && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_name?.message as string ?? ""}</p>}
                   </div>
                   <div>
                     <Input type="email" placeholder="Email Address" {...step2.register("patient_email")} />
-                    {step2.formState.errors.patient_email && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_email?.message ?? ""}</p>}
+                    {step2.formState.errors.patient_email && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_email?.message as string ?? ""}</p>}
                   </div>
                   <div>
                     <Input placeholder="Phone Number" {...step2.register("patient_phone")} />
-                    {step2.formState.errors.patient_phone && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_phone?.message ?? ""}</p>}
+                    {step2.formState.errors.patient_phone && <p className="text-red-500 text-xs mt-1">{step2.formState.errors.patient_phone?.message as string ?? ""}</p>}
                   </div>
                   <div>
                     <Input placeholder="WhatsApp Number (if different)" {...step2.register("patient_whatsapp")} />
@@ -221,7 +221,7 @@ export default function BookPage() {
                       min={new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0]}
                       {...step3.register("preferred_date")}
                     />
-                    {step3.formState.errors.preferred_date && <p className="text-red-500 text-xs mt-1">{step3.formState.errors.preferred_date?.message ?? ""}</p>}
+                    {step3.formState.errors.preferred_date && <p className="text-red-500 text-xs mt-1">{step3.formState.errors.preferred_date?.message as string ?? ""}</p>}
                   </div>
                   <div>
                     <Textarea placeholder="Any additional notes, questions, or medical information..." rows={4} {...step3.register("notes")} />
