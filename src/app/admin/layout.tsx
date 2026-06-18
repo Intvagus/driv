@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
@@ -27,8 +28,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return redirect("/login?redirectTo=/admin") as never;
 
-  const { data: rawAdminUser } = await supabase
-    .from("admin_users")
+  const adminClient = createAdminClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: rawAdminUser } = await (adminClient.from("admin_users") as any)
     .select("role, email")
     .eq("id", user.id)
     .single();
