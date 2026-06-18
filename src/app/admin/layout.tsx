@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
@@ -28,15 +27,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return redirect("/login?redirectTo=/admin") as never;
 
-  const adminClient = createAdminClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: rawAdminUser } = await (adminClient.from("admin_users") as any)
+  const { data: rawAdminUser, error: adminError } = await supabase
+    .from("admin_users")
     .select("role, email")
     .eq("id", user.id)
     .single();
   const adminUser = rawAdminUser as AdminUser | null;
 
-  if (!adminUser) return redirect("/login?error=not_admin") as never;
+  if (adminError || !adminUser) return redirect("/login?error=not_admin") as never;
 
   return (
     <div className="flex min-h-screen bg-gray-50">
