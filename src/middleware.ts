@@ -56,6 +56,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // /epi is a self-contained tool with no login/account system — it must
+    // not depend on Supabase being configured, so it's excluded here.
+    "/((?!_next/static|_next/image|favicon.ico|epi(?:/|$)|api/epi(?:/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
