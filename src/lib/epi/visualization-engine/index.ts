@@ -22,6 +22,45 @@ export function buildVisualizations(analysis: AnalysisResult, meta: VizMeta): { 
   const charts: ChartSpec[] = [];
   const tables: TableSpec[] = [];
 
+  // Target -> Achieved -> Coverage funnel infographic (communicates the headline
+  // number before the reader reaches any chart, per the "infographic -> chart ->
+  // table -> exact values" pattern).
+  const target = analysis.kpis.find((k) => k.key === "target_population");
+  const vaccinated = analysis.kpis.find((k) => k.key === "vaccinated_population");
+  const coveragePct = analysis.kpis.find((k) => k.key === "coverage_pct");
+  if (target && vaccinated && coveragePct && typeof target.value === "number" && typeof vaccinated.value === "number" && typeof coveragePct.value === "number") {
+    charts.push({
+      id: "coverage-flow",
+      kind: "coverage_flow",
+      title: `Coverage, ${meta.period}`,
+      data: [
+        { label: "Target Population", value: target.value },
+        { label: "Vaccinated Population", value: vaccinated.value },
+        { label: "Coverage", value: coveragePct.value },
+      ],
+      sourceNote: sourceNote(meta),
+      rationale: "A flow infographic communicates the headline target-to-coverage relationship before the reader reaches the detailed chart and table below.",
+    });
+  }
+
+  // District ranking infographic -> highlights top and priority (lowest/flagged)
+  // performers together, ahead of the full ranked bar chart.
+  if (analysis.districtBreakdown.length > 3) {
+    charts.push({
+      id: "district-ranking",
+      kind: "ranked_leaderboard",
+      title: `District ranking — top and priority districts, ${meta.period}`,
+      unit: analysis.districtMetricUnit,
+      data: analysis.districtBreakdown.map((d) => ({
+        label: d.district,
+        value: d.value,
+        flagged: d.band === "critical" || d.band === "needs_attention",
+      })),
+      sourceNote: sourceNote(meta),
+      rationale: "Highlighting the strongest and weakest districts together draws attention to where programme action is most needed, before the full ranked comparison below.",
+    });
+  }
+
   // Geographic comparison -> ranked horizontal bars (per WHO guidance: avoid pie/donut for comparison).
   if (analysis.districtBreakdown.length > 0) {
     charts.push({

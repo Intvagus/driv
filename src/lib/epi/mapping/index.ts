@@ -1,16 +1,48 @@
 import { CleanedDataset, CleanedRecord, ColumnMapping, DatasetTypeId, ParsedTable } from "@/types/epi/dataset";
 import { getDatasetDefinition } from "../dataset-registry";
-import { findBestHeaderMatch } from "../dataset-registry/matching";
+import { findAllHeaderMatches } from "../dataset-registry/matching";
 
-/** Suggests a mapping from every system field of a dataset type to the best-matching uploaded header. */
+const MIN_CONFIDENCE = 0.5;
+
+/**
+ * Suggests a mapping from every system field of a dataset type to the
+ * best-matching uploaded header, using a global greedy assignment so a
+ * single uploaded column is never auto-mapped to more than one system
+ * field. Without this, a dataset with many similarly-named columns (e.g.
+ * one per-antigen coverage % column) can collapse Target Population,
+ * Vaccinated Population, Coverage, Dose etc. onto the same source column,
+ * silently corrupting every downstream calculation.
+ */
 export function suggestColumnMappings(datasetId: DatasetTypeId, headers: string[]): ColumnMapping[] {
   const def = getDatasetDefinition(datasetId);
+
+  type Candidate = { systemField: string; header: string; confidence: number; required: boolean };
+  const candidates: Candidate[] = [];
+  for (const col of def.columns) {
+    for (const match of findAllHeaderMatches(col, headers)) {
+      if (match.confidence >= MIN_CONFIDENCE) {
+        candidates.push({ systemField: col.key, header: match.header, confidence: match.confidence, required: col.required });
+      }
+    }
+  }
+
+  // Required fields get first claim on a tied/near-tied header; otherwise strongest match wins.
+  candidates.sort((a, b) => (Number(b.required) - Number(a.required)) || b.confidence - a.confidence);
+
+  const assignedField = new Map<string, { header: string; confidence: number }>();
+  const usedHeaders = new Set<string>();
+  for (const c of candidates) {
+    if (assignedField.has(c.systemField) || usedHeaders.has(c.header)) continue;
+    assignedField.set(c.systemField, { header: c.header, confidence: c.confidence });
+    usedHeaders.add(c.header);
+  }
+
   return def.columns.map((col) => {
-    const match = findBestHeaderMatch(col, headers);
+    const assigned = assignedField.get(col.key);
     return {
       systemField: col.key,
-      uploadedHeader: match && match.confidence >= 0.5 ? match.header : null,
-      confidence: match?.confidence ?? 0,
+      uploadedHeader: assigned?.header ?? null,
+      confidence: assigned?.confidence ?? 0,
       isManualOverride: false,
     };
   });

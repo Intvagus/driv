@@ -5,6 +5,8 @@ export type ChartKind =
   | "stacked_bar"
   | "gauge_gap"
   | "ranked_list"
+  | "ranked_leaderboard"
+  | "coverage_flow"
   | "histogram";
 
 export interface ChartSeriesPoint {

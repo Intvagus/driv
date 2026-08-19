@@ -1,6 +1,7 @@
 import pptxgen from "pptxgenjs";
 import { ReportModel } from "@/types/epi/report";
 import { ChartSpec } from "@/types/epi/visualization";
+import { formatKpiValue } from "@/lib/epi/format";
 import { downloadBlob, slugify } from "./download";
 
 const NAVY = "0F2A3A";
@@ -48,7 +49,7 @@ function addKpiSlide(pres: pptxgen, report: ReportModel) {
   slide.addText("KPI Dashboard", { x: 0.5, y: 0.3, w: 9, fontSize: 20, bold: true, color: NAVY });
   const rows: pptxgen.TableRow[] = [
     [{ text: "Indicator", options: { bold: true } }, { text: "Value", options: { bold: true } }],
-    ...kpis.map((k) => [{ text: k.label }, { text: `${k.value}${k.unit === "%" ? "%" : ""}` }]),
+    ...kpis.map((k) => [{ text: k.label }, { text: formatKpiValue(k) }]),
   ];
   slide.addTable(rows, { x: 0.5, y: 1.1, w: 9, fontSize: 12, border: { type: "solid", color: "E2E8F0" }, autoPage: false });
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { Document, Page, View, Text, Image, StyleSheet, renderToBuffer } from "@react-pdf/renderer";
 import { ReportModel, ReportSection } from "@/types/epi/report";
 import { TableSpec } from "@/types/epi/visualization";
+import { formatKpiValue } from "@/lib/epi/format";
 import { renderChartToPng } from "./render-chart-png";
 
 const styles = StyleSheet.create({
@@ -66,10 +67,7 @@ async function SectionBlock({ section }: { section: ReportSection }) {
           {section.kpis.map((k) => (
             <View key={k.key} style={styles.kpiCard}>
               <Text style={styles.kpiLabel}>{k.label}</Text>
-              <Text style={styles.kpiValue}>
-                {k.value}
-                {k.unit === "%" ? "%" : ""}
-              </Text>
+              <Text style={styles.kpiValue}>{formatKpiValue(k)}</Text>
             </View>
           ))}
         </View>

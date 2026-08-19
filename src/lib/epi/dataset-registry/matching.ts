@@ -15,29 +15,39 @@ export interface HeaderMatch {
   confidence: number;
 }
 
-/** Best matching uploaded header for one column definition, or null if nothing plausible. */
-export function findBestHeaderMatch(col: ColumnDefinition, headers: string[]): HeaderMatch | null {
+function scoreHeader(col: ColumnDefinition, header: string): number {
   const candidates = [col.label, ...col.aliases].map(normalizeHeader);
-  let best: HeaderMatch | null = null;
-
-  for (const header of headers) {
-    const normHeader = normalizeHeader(header);
-    if (!normHeader) continue;
-    let score = 0;
-    for (const candidate of candidates) {
-      if (normHeader === candidate) {
-        score = Math.max(score, 1);
-      } else if (candidate.length >= 3 && (normHeader.includes(candidate) || candidate.includes(normHeader))) {
-        score = Math.max(score, 0.8);
-      } else if (
-        normHeader.split(" ").some((tok) => candidate.split(" ").includes(tok) && tok.length >= 3)
-      ) {
-        score = Math.max(score, 0.55);
-      }
+  const normHeader = normalizeHeader(header);
+  if (!normHeader) return 0;
+  let score = 0;
+  for (const candidate of candidates) {
+    if (normHeader === candidate) {
+      score = Math.max(score, 1);
+    } else if (candidate.length >= 3 && (normHeader.includes(candidate) || candidate.includes(normHeader))) {
+      score = Math.max(score, 0.8);
+    } else if (normHeader.split(" ").some((tok) => candidate.split(" ").includes(tok) && tok.length >= 3)) {
+      score = Math.max(score, 0.55);
     }
+  }
+  return score;
+}
+
+/** Best matching uploaded header for one column definition, ignoring any competition from other columns. */
+export function findBestHeaderMatch(col: ColumnDefinition, headers: string[]): HeaderMatch | null {
+  let best: HeaderMatch | null = null;
+  for (const header of headers) {
+    const score = scoreHeader(col, header);
     if (score > 0 && (!best || score > best.confidence)) {
       best = { header, confidence: score };
     }
   }
   return best;
+}
+
+/** All plausible header matches for one column definition, sorted best-first. */
+export function findAllHeaderMatches(col: ColumnDefinition, headers: string[]): HeaderMatch[] {
+  return headers
+    .map((header) => ({ header, confidence: scoreHeader(col, header) }))
+    .filter((m) => m.confidence > 0)
+    .sort((a, b) => b.confidence - a.confidence);
 }

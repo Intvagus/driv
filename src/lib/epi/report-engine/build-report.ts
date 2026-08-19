@@ -62,7 +62,7 @@ export function buildReportModel(input: BuildReportInput): ReportModel {
     `Dataset type: ${def.name}. ${def.description}`,
     `Column mapping applied: ${mappedList || "none"}.`,
     primaryKpi?.guidance
-      ? `Primary indicator calculation — ${primaryKpi.guidance.label}: ${primaryKpi.guidance.calculationMethod}. Source: ${primaryKpi.guidance.source}.`
+      ? `Primary indicator calculation — ${primaryKpi.guidance.label}: ${primaryKpi.guidance.calculationMethod}. Source: ${primaryKpi.guidance.source.replace(/\.+$/, "")}.`
       : "",
     "Designed with reference to publicly available WHO data-design and immunization-monitoring principles; this is not an official WHO output and has not been certified by WHO.",
   ]
@@ -81,7 +81,15 @@ export function buildReportModel(input: BuildReportInput): ReportModel {
       charts: [qualityChart],
       tables: [issuesTable(quality)],
     }),
-    kpi_dashboard: () => ({ id: "kpi_dashboard", type: "kpi_dashboard", title: SECTION_LABELS.kpi_dashboard, body: "", included: true, kpis: analysis.kpis }),
+    kpi_dashboard: () => ({
+      id: "kpi_dashboard",
+      type: "kpi_dashboard",
+      title: SECTION_LABELS.kpi_dashboard,
+      body: "",
+      included: true,
+      kpis: analysis.kpis,
+      charts: analysisCharts.filter((c) => c.id === "coverage-flow"),
+    }),
     key_findings: () => ({
       id: "key_findings",
       type: "key_findings",
@@ -97,7 +105,7 @@ export function buildReportModel(input: BuildReportInput): ReportModel {
             title: SECTION_LABELS.geographic_analysis,
             body: `${analysis.districtMetricLabel} by district for ${reportingPeriod}.`,
             included: true,
-            charts: analysisCharts.filter((c) => c.id === "district-comparison"),
+            charts: analysisCharts.filter((c) => c.id === "district-ranking" || c.id === "district-comparison"),
             tables: analysisTables.filter((t) => t.id === "district-table"),
           }
         : skip("geographic_analysis"),

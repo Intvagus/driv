@@ -20,6 +20,7 @@ import {
 import { ReportModel, ReportSection } from "@/types/epi/report";
 import { KpiValue } from "@/types/epi/indicator";
 import { TableSpec } from "@/types/epi/visualization";
+import { formatKpiValue } from "@/lib/epi/format";
 import { renderChartToPng } from "./render-chart-png";
 
 const PAGE = { width: 12240, height: 15840 }; // US Letter, DXA
@@ -49,7 +50,7 @@ function kpiTable(kpis: KpiValue[]): Table {
       new TableRow({
         children: [
           new TableCell({ width: { size: colWidth, type: WidthType.DXA }, children: [new Paragraph(k.label)] }),
-          new TableCell({ width: { size: colWidth, type: WidthType.DXA }, children: [new Paragraph(`${k.value}${k.unit === "%" ? "%" : ""}`)] }),
+          new TableCell({ width: { size: colWidth, type: WidthType.DXA }, children: [new Paragraph(formatKpiValue(k))] }),
         ],
       }),
   );

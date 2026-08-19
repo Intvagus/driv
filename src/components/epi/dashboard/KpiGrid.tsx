@@ -1,12 +1,6 @@
 import { KpiValue } from "@/types/epi/indicator";
+import { formatKpiValue } from "@/lib/epi/format";
 import { Badge, Card, InfoTooltip, bandTone } from "@/components/epi/ui/primitives";
-
-function formatKpi(k: KpiValue): string {
-  if (typeof k.value !== "number") return k.value;
-  if (k.format === "percent") return `${k.value.toFixed(1)}%`;
-  if (k.format === "decimal1") return k.value.toFixed(1);
-  return k.value.toLocaleString();
-}
 
 export function KpiGrid({ kpis }: { kpis: KpiValue[] }) {
   return (
@@ -24,7 +18,7 @@ export function KpiGrid({ kpis }: { kpis: KpiValue[] }) {
               </InfoTooltip>
             )}
           </div>
-          <p className="mt-1 text-2xl font-semibold text-epi-ink">{formatKpi(k)}</p>
+          <p className="mt-1 text-2xl font-semibold text-epi-ink">{formatKpiValue(k)}</p>
           {k.bandLabel && (
             <div className="mt-1.5">
               <Badge tone={bandTone(k.band)}>{k.bandLabel}</Badge>

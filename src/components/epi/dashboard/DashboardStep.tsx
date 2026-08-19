@@ -14,6 +14,7 @@ import { KpiGrid } from "./KpiGrid";
 import { DataQualityCard } from "./DataQualityCard";
 import { ChartCard } from "./ChartCard";
 import { ThresholdSettings } from "./ThresholdSettings";
+import { KeyFindingCallout, PriorityAreaCallout } from "./Callouts";
 
 interface Props {
   cleaned: CleanedDataset;
@@ -62,6 +63,13 @@ export function DashboardStep({ cleaned, reportingPeriod, overrides, onOverrides
         <SectionHeading>{def.name} — Analytics Dashboard</SectionHeading>
         <p className="text-sm text-slate-500">{cleaned.records.length.toLocaleString()} records · {reportingPeriod} · {cleaned.sourceFileName}</p>
       </div>
+
+      {(findings[0] || analysis.districtBreakdown.some((d) => d.band === "critical" || d.band === "needs_attention")) && (
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {findings[0] && <KeyFindingCallout finding={findings[0]} />}
+          <PriorityAreaCallout analysis={analysis} />
+        </div>
+      )}
 
       <KpiGrid kpis={analysis.kpis} />
 
