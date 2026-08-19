@@ -63,11 +63,12 @@ export const COVERAGE: DatasetDefinition = {
     ...geoColumns,
     { key: "antigen", label: "Vaccine/Antigen", required: true, dataType: "category", aliases: ["antigen", "vaccine", "vaccine/antigen"] },
     { key: "dose", label: "Dose", required: false, dataType: "category", aliases: ["dose", "dose number"] },
-    { key: "target_population", label: "Target Population", required: true, dataType: "number", aliases: ["target", "target population", "target_pop"] },
-    { key: "vaccinated_population", label: "Vaccinated Population", required: true, dataType: "number", aliases: ["vaccinated", "vaccinated population", "achieved"] },
+    { key: "target_population", label: "Target Population", required: false, dataType: "number", aliases: ["target", "target population", "target_pop"] },
+    { key: "vaccinated_population", label: "Vaccinated Population", required: false, dataType: "number", aliases: ["vaccinated", "vaccinated population", "achieved"] },
     { key: "coverage", label: "Coverage", required: false, dataType: "number", aliases: ["coverage", "coverage %", "coverage percent"] },
     { key: "reporting_period", label: "Reporting Period", required: true, dataType: "string", aliases: ["reporting period", "period", "month", "quarter", "year"] },
   ],
+  requiredAlternatives: [["coverage"], ["target_population", "vaccinated_population"]],
   reportSections: ["executive_summary", "data_quality", "kpi_dashboard", "geographic_analysis", "vaccine_analysis", "trends", "inequalities", "key_findings", "recommendations", "limitations", "annex"],
 };
 

@@ -11,7 +11,7 @@ export function buildLimitations(
   mappings: ColumnMapping[],
   def: DatasetDefinition,
 ): string[] {
-  const limitations: string[] = [];
+  const limitations: string[] = [...analysis.notes];
 
   const completeness = quality.dimensions.find((d) => d.dimension === "completeness");
   if (completeness && completeness.score < 100) {

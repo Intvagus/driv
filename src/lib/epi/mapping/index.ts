@@ -118,8 +118,27 @@ export function applyColumnMapping(
   };
 }
 
+/**
+ * Fields still missing before analysis can proceed: every individually
+ * required column, plus — if the dataset defines requiredAlternatives —
+ * at least one alternative group must be fully mapped (e.g. Coverage
+ * datasets need either a direct "coverage" column, or both Target and
+ * Vaccinated Population; not necessarily all three).
+ */
 export function getMissingRequiredFields(datasetId: DatasetTypeId, mappings: ColumnMapping[]): string[] {
   const def = getDatasetDefinition(datasetId);
   const mappedFields = new Set(mappings.filter((m) => m.uploadedHeader).map((m) => m.systemField));
-  return def.columns.filter((c) => c.required && !mappedFields.has(c.key)).map((c) => c.label);
+  const missing = def.columns.filter((c) => c.required && !mappedFields.has(c.key)).map((c) => c.label);
+
+  if (def.requiredAlternatives && def.requiredAlternatives.length > 0) {
+    const anySatisfied = def.requiredAlternatives.some((group) => group.every((key) => mappedFields.has(key)));
+    if (!anySatisfied) {
+      const groupDescriptions = def.requiredAlternatives.map((group) =>
+        group.map((key) => def.columns.find((c) => c.key === key)?.label ?? key).join(" and "),
+      );
+      missing.push(`Either ${groupDescriptions.join(", or ")}`);
+    }
+  }
+
+  return missing;
 }

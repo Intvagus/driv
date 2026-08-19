@@ -62,6 +62,14 @@ export interface DatasetDefinition {
   detection: DatasetDetectionRule;
   columns: ColumnDefinition[];
   reportSections: string[];
+  /**
+   * Alternative sets of fields that can each independently satisfy a
+   * requirement, on top of individually required columns. E.g. Coverage
+   * data may supply either a direct "coverage" column, or both
+   * "target_population" and "vaccinated_population" — not necessarily all
+   * three. At least one group's fields must all be mapped.
+   */
+  requiredAlternatives?: string[][];
 }
 
 export interface DatasetDetectionCandidate {
