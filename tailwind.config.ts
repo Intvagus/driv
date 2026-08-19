@@ -17,6 +17,13 @@ const config: Config = {
         "brand-dark-light": "#1e4a5c",
         "brand-gold-light": "#d4b67a",
         "brand-gold-dark": "#a8833d",
+        "epi-ink": "#0F2A3A",
+        "epi-primary": "#1170AA",
+        "epi-primary-dark": "#0C557F",
+        "epi-accent": "#B45309",
+        "epi-good": "#0F766E",
+        "epi-bg": "#F7F9FB",
+        "epi-border": "#E2E8F0",
       },
       fontFamily: {
         sans: ["var(--font-inter)", ...fontFamily.sans],
