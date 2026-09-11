@@ -1,0 +1,65 @@
+# Disavow file for drranairfan.com
+# Drafted by Claude Code SEO agent, 2026-09-11, from Backlink Audit tab analysis
+# NOT YET SUBMITTED to Google Search Console — review then upload at
+# https://search.google.com/search-console/disavow-links
+# Source: Backlink Audit tab, rows classified 'TOXIC — adult/gambling' and 'TOXIC — PBN pattern'
+#
+domain:plancultranssexuel.com
+domain:xvideospornos.org
+domain:ramonacannabis.com
+domain:pornoculonas.net
+domain:otakusexart.com
+domain:zayiflama.club
+domain:delhiroyalescorts.com
+domain:qh88online1.org
+domain:vintagemalecelebs.com
+domain:sesmagazin.com
+domain:codigomx.io
+domain:aydinyerel.com
+domain:lactantium.de
+domain:merakligazete.com
+domain:learnthat.org
+domain:airconditioningsouthall.co.uk
+domain:pdsdigital.com.py
+domain:gasteavrupa.org
+domain:tiranatoday.al
+domain:dzik.bydgoszcz.pl
+domain:kibriswebhaber.com
+domain:herihaber.com.tr
+domain:punjabimedia.in
+domain:cn24news.in
+domain:meeldib.com
+domain:tekelman.com.tr
+domain:deeponlinestore.com
+domain:plumbsmith.co.uk
+domain:haberekspress.com.tr
+domain:autovermietung-altenburg.de
+domain:focagazete.com
+domain:karabukbolgehaber.com
+domain:mikeosemekenews.com.ng
+domain:guiase.net
+domain:elbistanhabermerkezi.com
+domain:fmcentenario.com
+domain:teketekhaber.com
+domain:chervesti.ru
+domain:talsu.kg
+domain:yarpuzedebiyatdergisi.com
+domain:bricksmasonsltd.org
+domain:haberaramizda.com
+domain:bultenkibris.com
+domain:sportravne.si
+domain:kirsehirhakimiyet.com
+domain:ebusinesslife.com.ng
+domain:4x4profi.ru
+domain:iliveok.com
+domain:karacabeytakip.com
+domain:lieto.hu
+domain:marashaberinmerkezi.com
+domain:ulkucukadro.com
+domain:dailyscoopng.com
+domain:evergreenpc.ca
+domain:gezginnerede.com
+domain:kksfest.si
+domain:gazetebergama.com.tr
+domain:adenplus.net
+domain:thesoundoftheembryo.es

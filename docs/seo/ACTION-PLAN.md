@@ -14,6 +14,16 @@ matrix in `CLAUDE.md` (1 = can do automatically, 2 = needs your approval,
 Nothing here is "nice to have." Getting these wrong loses the local-pack
 ranking and reviews the WordPress site already earned (see AUDIT §1).
 
+**Update 2026-09-11 — this P0 list is now second priority.** The user
+supplied `docs/seo/DrRanaIrfanSEOIssueTracker.xlsx`, a real GSC-baselined
+audit (12 Jun–9 Sep 2026) that surfaced something more urgent than
+anything below: **the live WordPress site was compromised in July 2026**
+(adult/gambling spam injected and indexed, `/tag/*` archives hijacked as
+the ranking surface). Whether the entry point is actually closed is
+still unverified. See that workbook's Technical SEO tab (`TECH-01`
+through `TECH-05`) and `CLAUDE.md` for detail — closing that hole and
+rotating credentials outranks every item in this table until it's done.
+
 | Task | Bucket | Effort | Notes |
 |---|---|---|---|
 | Decide and document the migration/cutover plan: freeze the WordPress URL list, map every WP URL → new Next.js URL, write 301 redirects for anything that changes | 2 | M | This needs your decision on final URL structure, not just mine. I can generate the redirect map once you confirm slugs. |
