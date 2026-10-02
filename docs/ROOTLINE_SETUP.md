@@ -15,6 +15,9 @@ It shares Supabase auth with the clinic site but uses only its own
 | `/tracker/app/compare` | Any two check-ins, side by side or with a slider |
 | `/tracker/app/treatments` | Treatments + 30-day adherence |
 | `/tracker/app/report` | Printable doctor report (Pro) |
+| `/tracker/app/account` | Plan, billing link, reminders, support/legal links, delete account |
+| `/tracker/privacy`, `/tracker/terms`, `/tracker/refunds` | Legal pages (linked in the footer and at sign-up) |
+| `/api/tracker/account/delete` | Deletes all of a user's tracker data and photos |
 | `/api/tracker/checkout` | Redirects to Lemon Squeezy checkout with the user id attached |
 | `/api/tracker/webhook` | Lemon Squeezy webhook → `tracker_subscriptions` |
 | `/api/tracker/reminders` | Daily cron: emails users whose check-in is due |
@@ -28,6 +31,19 @@ check-ins + report. Prices are set in `src/lib/tracker/config.ts` (display)
 and in Lemon Squeezy (actual charge) — keep them matching.
 
 ## Launch checklist
+
+0. **Legal pages** — set `NEXT_PUBLIC_TRACKER_COMPANY_NAME` (your legal
+   business or personal name) and `NEXT_PUBLIC_TRACKER_SUPPORT_EMAIL` (an
+   inbox you check). The privacy policy, terms and refund policy are
+   plain-language templates written for a US consumer health app. **Have a
+   lawyer review them before launch**, especially the health-data section.
+   If you change the refund window, update `/tracker/refunds` to match what
+   you set in Lemon Squeezy. Lemon Squeezy and Google Play both ask for these
+   URLs during review:
+   - `https://<your-domain>/tracker/privacy`
+   - `https://<your-domain>/tracker/terms`
+   - `https://<your-domain>/tracker/refunds`
+   - Account deletion (Google Play "Data safety"): `https://<your-domain>/tracker/app/account`
 
 1. **Database** — run `supabase/migrations/002_rootline_tracker.sql` in the
    Supabase SQL editor. It creates the tables, RLS policies and the private
@@ -54,6 +70,17 @@ and in Lemon Squeezy (actual charge) — keep them matching.
    `curl -H "Authorization: Bearer $CRON_SECRET" "https://<your-domain>/api/tracker/reminders?dry=1"`
 5. **Env vars** — see `.env.local.example`. `SUPABASE_SERVICE_ROLE_KEY` is
    required by the webhook and the reminder cron.
+
+## Account deletion
+
+Users delete everything from the Account page (type DELETE to confirm):
+photos, check-ins, treatments, reminder settings and subscription record.
+If they're still subscribed, deletion cancels the subscription through the
+Lemon Squeezy API when `LEMONSQUEEZY_API_KEY` is set. Otherwise it asks them
+to cancel from the billing portal first, so nobody is charged for a deleted
+account. Their login is removed too, unless it's also used on the clinic
+site (they have clinic bookings or are staff). In that case only the
+Rootline data is deleted.
 
 ## How reminders work
 

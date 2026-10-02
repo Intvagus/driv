@@ -137,6 +137,19 @@ function LoginForm() {
                   {loading ? "Please wait…" : mode === "signup" ? "Create account" : "Sign in"}
                 </button>
               </form>
+              {mode === "signup" && (
+                <p className="mt-3 text-center text-xs text-slate-500">
+                  By creating an account you agree to the{" "}
+                  <Link href="/tracker/terms" className="underline">
+                    Terms
+                  </Link>{" "}
+                  and{" "}
+                  <Link href="/tracker/privacy" className="underline">
+                    Privacy Policy
+                  </Link>
+                  , including how we handle your photos and health information.
+                </p>
+              )}
               <button
                 type="button"
                 onClick={sendMagicLink}

@@ -45,9 +45,16 @@ const FAQ = [
   },
 ];
 
-export default function TrackerLanding() {
+export default function TrackerLanding({ searchParams }: { searchParams: { deleted?: string } }) {
   return (
     <>
+      {searchParams.deleted && (
+        <div role="status" className="bg-rl-ink px-4 py-3 text-center text-sm text-white">
+          {searchParams.deleted === "account"
+            ? "Your account and all your data have been deleted."
+            : "All your Rootline data has been deleted. Your login was kept because you also use it for the clinic site."}
+        </div>
+      )}
       <header className="border-b border-rl-border bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <Link href="/tracker">

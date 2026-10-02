@@ -64,3 +64,11 @@ export const COMMON_TREATMENTS = [
 ];
 
 export const PHOTO_BUCKET = "tracker-photos";
+
+// Business details shown in the legal pages and emails. Fill these in
+// before launch (and have the legal pages reviewed by a lawyer).
+export const LEGAL = {
+  companyName: process.env.NEXT_PUBLIC_TRACKER_COMPANY_NAME || "Rootline",
+  contactEmail: process.env.NEXT_PUBLIC_TRACKER_SUPPORT_EMAIL || "support@example.com",
+  lastUpdated: "October 2, 2026",
+} as const;

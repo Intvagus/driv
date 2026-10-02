@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Camera, Columns2, Pill, FileText, LogOut } from "lucide-react";
+import { LayoutDashboard, Camera, Columns2, Pill, FileText, LogOut, UserRound } from "lucide-react";
 import { createTrackerClient as createClient } from "@/lib/tracker/supabase";
 import { RootlineLogo } from "./Logo";
 
@@ -47,14 +47,26 @@ export function AppNav({ isPro }: { isPro: boolean }) {
               </Link>
             ))}
           </nav>
-          <button
-            onClick={signOut}
-            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-rl-ink"
-            aria-label="Sign out"
-          >
-            <LogOut className="h-4 w-4" aria-hidden />
-            <span className="hidden sm:inline">Sign out</span>
-          </button>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/tracker/app/account"
+              className={`flex items-center gap-1.5 text-sm hover:text-rl-ink ${
+                pathname === "/tracker/app/account" ? "text-rl-primary" : "text-slate-500"
+              }`}
+              aria-label="Account"
+            >
+              <UserRound className="h-4 w-4" aria-hidden />
+              <span className="hidden sm:inline">Account</span>
+            </Link>
+            <button
+              onClick={signOut}
+              className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-rl-ink"
+              aria-label="Sign out"
+            >
+              <LogOut className="h-4 w-4" aria-hidden />
+              <span className="hidden sm:inline">Sign out</span>
+            </button>
+          </div>
         </div>
       </header>
       {/* Mobile bottom tab bar */}

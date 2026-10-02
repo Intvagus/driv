@@ -59,6 +59,18 @@ export default function TrackerLayout({ children }: { children: React.ReactNode 
           <Link href="/tracker" className="hover:underline">
             Home
           </Link>{" "}
+          ·{" "}
+          <Link href="/tracker/privacy" className="hover:underline">
+            Privacy
+          </Link>{" "}
+          ·{" "}
+          <Link href="/tracker/terms" className="hover:underline">
+            Terms
+          </Link>{" "}
+          ·{" "}
+          <Link href="/tracker/refunds" className="hover:underline">
+            Refunds
+          </Link>{" "}
           · © {new Date().getFullYear()} {APP_NAME}
         </p>
       </footer>
