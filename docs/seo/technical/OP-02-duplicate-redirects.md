@@ -1,4 +1,4 @@
-# OP-02 — 301 redirects for the 7 duplicate pairs
+# OP-02 — 301 redirects for the 7 duplicate pairs + 1 cannibalization fix
 
 Ready to apply once the content-merge step is done — **not before.** A
 301 moves the URL's authority, not its text; whatever's only on the page
@@ -32,15 +32,60 @@ way a `-2` suffix does).
 | `/hair-transplant-donor-area-complete-guide/pimples-on-donor-area-after-hair-transplant/` | `/pimples-on-the-donor-area-after-hair-transplant/` | Same topic, nearly identical title, nested in a guide series vs standalone. Standalone wins: 16 clicks/90d vs 3 |
 | `/foods-that-increase-dht/` | `/foods-that-increase-dht-production/` | Near-identical diet/DHT content. Winner: 64 clicks/90d vs 23, position 11.4 vs 22.2 |
 
-## Not a redirect — a cannibalization issue, flagged separately
+## Resolved — the pricing-page cannibalization
 
 `/hair-transplant-cost-in-pakistan/` and `/updated-hair-transplant-prices-in-pakistan/`
-compete for the same pricing intent (214 clicks/pos 11 vs 12 clicks/pos
-51), but the weaker page is also the parent hub for the city-specific
-pricing subpages (Islamabad, Lahore, Karachi, etc.) — redirecting it away
-would orphan those. This needs a content decision (which page becomes the
-pricing pillar), not a redirect rule. Marked `Needs review` in the
-tracker rather than `Merge/301`.
+compete for the same pricing intent (12 clicks/pos 51 vs 214 clicks/pos
+11). Originally flagged as a judgment call rather than a straight
+redirect, because the weaker page is the parent hub for 12 city-specific
+pricing subpages — resolved as follows:
+
+**Redirect 8**
+- Source URL: `/hair-transplant-cost-in-pakistan/`
+- Destination URL: `/updated-hair-transplant-prices-in-pakistan/`
+
+**Why this direction, and why it's safe:** a Rank Math redirect set to
+**Exact** match (as used throughout this doc) only intercepts requests to
+that one literal URL — it does not prefix-match, so none of the 12 nested
+city pages (`.../hair-transplant-cost-in-multan/` etc.) are affected by
+redirecting the hub URL itself. They stay exactly where they are, with
+their own URLs unchanged. The direction (hub → updated-prices page, not
+the reverse) follows `OP-09`'s own recommended fix, which already treats
+`/updated-hair-transplant-prices-in-pakistan/` as the canonical pricing
+page worth linking to from the homepage — that's a stronger signal than
+just picking whichever page currently ranks better.
+
+**Before applying:** check `/hair-transplant-cost-in-pakistan/`'s content
+for anything (a pricing table, an FAQ section) not already on
+`/updated-hair-transplant-prices-in-pakistan/`, and copy it over first —
+same rule as every other redirect on this page.
+
+**Required follow-up, not optional:** `/updated-hair-transplant-prices-in-pakistan/`
+needs internal links added to all 12 city subpages — they're currently
+only reachable via the hub page that's about to redirect away. Add a
+section (e.g. "Hair Transplant Cost by City") linking each:
+
+| City | Link to |
+|---|---|
+| Islamabad | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-islamabad/` |
+| Multan | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-multan/` |
+| Faisalabad | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-faisalabad/` |
+| Gujranwala | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-gujranwala/` |
+| Rawalpindi | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-rawalpindi/` |
+| Peshawar | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-peshawar/` |
+| Gujrat | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-gujrat/` |
+| Hyderabad | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-hyderabad/` |
+| Quetta | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-quetta/` |
+| Karachi | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-karachi/` |
+| Bahawalpur | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-bahawalpur/` |
+| Lahore | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-lahore-pakistan/` |
+
+Two of these are worth a second look while you're in there: **Lahore**
+pulls 3,438 impressions but sits at position 59.5 (worst of the twelve
+despite high demand — something's underperforming on that page relative
+to its visibility), and **Karachi** similarly has 2,890 impressions at
+position 44.5. Both look like they'd benefit from the same kind of
+content attention the pricing pillar itself is getting.
 
 ---
 
@@ -62,10 +107,19 @@ Rank Math's redirects are visible/editable/reversible from wp-admin.
 | `/hair-transplant-cost-in-islamabad/` | `https://drranairfan.com/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-islamabad/` | 301 Permanent Redirect |
 | `/hair-transplant-donor-area-complete-guide/pimples-on-donor-area-after-hair-transplant/` | `https://drranairfan.com/pimples-on-the-donor-area-after-hair-transplant/` | 301 Permanent Redirect |
 | `/foods-that-increase-dht/` | `https://drranairfan.com/foods-that-increase-dht-production/` | 301 Permanent Redirect |
+| `/hair-transplant-cost-in-pakistan/` | `https://drranairfan.com/updated-hair-transplant-prices-in-pakistan/` | 301 Permanent Redirect |
 
 Source URL in Rank Math's redirect manager is typically entered as the
 relative path (as shown) — it matches against the request path regardless
 of domain.
+
+**One of these needs extra care:** for `/hair-transplant-cost-in-pakistan/`
+(redirect 8), double-check the match-type dropdown is set to **Exact**,
+not Contains or any prefix-style match. Exact is the default and is
+correct for all 8 of these — but if it ever got switched to something
+broader on this particular row, it would also catch and redirect the 12
+city subpages nested under it, which is exactly what this fix is
+designed to avoid.
 
 ## Option B (fallback) — raw `.htaccess`
 
@@ -84,13 +138,22 @@ RewriteRule ^does-zyn-cause-hair-loss/?$ /does-zyn-cause-hair-loss-2/ [R=301,L]
 RewriteRule ^hair-transplant-cost-in-islamabad/?$ /hair-transplant-cost-in-pakistan/hair-transplant-cost-in-islamabad/ [R=301,L]
 RewriteRule ^hair-transplant-donor-area-complete-guide/pimples-on-donor-area-after-hair-transplant/?$ /pimples-on-the-donor-area-after-hair-transplant/ [R=301,L]
 RewriteRule ^foods-that-increase-dht/?$ /foods-that-increase-dht-production/ [R=301,L]
+RewriteRule ^hair-transplant-cost-in-pakistan/?$ /updated-hair-transplant-prices-in-pakistan/ [R=301,L]
 ```
 
+**Note for redirect 8 in this format specifically:** the `$` anchor at the
+end of the pattern is what keeps this scoped to the exact URL — it means
+"end of string here." Without it, this rule would also match and redirect
+every nested city subpage (`hair-transplant-cost-in-pakistan/hair-transplant-cost-in-multan/`
+etc.), which is exactly what it must not do. Leave the `$` in place.
+
 Back up `.htaccess` before editing it — a broken rule here can take the
-entire site down, not just these four URLs.
+entire site down, not just these eight URLs.
 
 ## Status
 
 Drafted and ready. Tracker (`OP-02 Blog Audit` tab) updated: each winner
-marked `Keep`, each loser marked `Merge/301` with this same destination.
-Not applied — needs WordPress/hosting access this agent doesn't have.
+marked `Keep`/`Keep & strengthen`, each loser marked `Merge/301` with its
+destination. Not applied — needs WordPress/hosting access this agent
+doesn't have, and the internal-linking follow-up for redirect 8 is real
+content work, not just a redirect rule.
