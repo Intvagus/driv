@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { AppNav } from "@/components/tracker/AppNav";
-import { getSubscription, requireTrackerUser } from "@/lib/tracker/server";
+import { ensurePreferences, getSubscription, requireTrackerUser } from "@/lib/tracker/server";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -8,7 +8,10 @@ export const metadata: Metadata = {
 
 export default async function TrackerAppLayout({ children }: { children: React.ReactNode }) {
   const { supabase, user } = await requireTrackerUser();
-  const { isPro } = await getSubscription(supabase, user.id);
+  const [{ isPro }] = await Promise.all([
+    getSubscription(supabase, user.id),
+    ensurePreferences(supabase, user.id),
+  ]);
 
   return (
     <>

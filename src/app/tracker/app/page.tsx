@@ -1,10 +1,18 @@
 import Link from "next/link";
 import { Camera, CalendarClock, Sparkles, CheckCircle2 } from "lucide-react";
 import { TodayChecklist } from "@/components/tracker/TodayChecklist";
+import { RemindersToggle } from "@/components/tracker/RemindersToggle";
 import { DeleteCheckinButton } from "@/components/tracker/DeleteCheckinButton";
 import { UpgradeButtons } from "@/components/tracker/UpgradeButtons";
 import { ANGLES, CHECKIN_INTERVAL_DAYS, FREE_CHECKIN_LIMIT, SHEDDING_LABELS } from "@/lib/tracker/config";
-import { daysBetween, formatDate, getCheckins, getSubscription, requireTrackerUser } from "@/lib/tracker/server";
+import {
+  daysBetween,
+  ensurePreferences,
+  formatDate,
+  getCheckins,
+  getSubscription,
+  requireTrackerUser,
+} from "@/lib/tracker/server";
 
 export default async function TrackerDashboard({
   searchParams,
@@ -12,9 +20,10 @@ export default async function TrackerDashboard({
   searchParams: { upgraded?: string };
 }) {
   const { supabase, user } = await requireTrackerUser();
-  const [{ subscription, isPro }, checkins] = await Promise.all([
+  const [{ subscription, isPro }, checkins, prefs] = await Promise.all([
     getSubscription(supabase, user.id),
     getCheckins(supabase, user.id),
+    ensurePreferences(supabase, user.id),
   ]);
 
   const latest = checkins[0];
@@ -119,6 +128,8 @@ export default async function TrackerDashboard({
       </div>
 
       <TodayChecklist />
+
+      <RemindersToggle userId={user.id} initial={prefs.email_reminders} />
 
       <section>
         <h2 className="mb-3 text-lg font-semibold">Your timeline</h2>

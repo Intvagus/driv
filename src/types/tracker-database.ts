@@ -164,6 +164,33 @@ export type TrackerDatabase = {
         };
         Relationships: [];
       };
+      tracker_preferences: {
+        Row: {
+          user_id: string;
+          email_reminders: boolean;
+          reminder_cycle: string | null;
+          reminders_in_cycle: number;
+          last_reminder_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          email_reminders?: boolean;
+          reminder_cycle?: string | null;
+          reminders_in_cycle?: number;
+          last_reminder_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          email_reminders?: boolean;
+          reminder_cycle?: string | null;
+          reminders_in_cycle?: number;
+          last_reminder_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: {

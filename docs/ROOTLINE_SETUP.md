@@ -17,6 +17,8 @@ It shares Supabase auth with the clinic site but uses only its own
 | `/tracker/app/report` | Printable doctor report (Pro) |
 | `/api/tracker/checkout` | Redirects to Lemon Squeezy checkout with the user id attached |
 | `/api/tracker/webhook` | Lemon Squeezy webhook → `tracker_subscriptions` |
+| `/api/tracker/reminders` | Daily cron: emails users whose check-in is due |
+| `/tracker/unsubscribe` | Confirm-to-unsubscribe page linked from every email |
 
 Free plan: 3 check-ins (enforced in the database by RLS). Pro: unlimited
 check-ins + report. Prices are set in `src/lib/tracker/config.ts` (display)
@@ -40,11 +42,30 @@ and in Lemon Squeezy (actual charge) — keep them matching.
      choose a signing secret (→ `LEMONSQUEEZY_WEBHOOK_SECRET`), and tick all
      `subscription_*` events.
    - Test the whole flow in Lemon Squeezy test mode before going live.
-4. **Env vars** — see `.env.local.example`. `SUPABASE_SERVICE_ROLE_KEY` is
-   required by the webhook.
+4. **Reminder emails** — run `supabase/migrations/003_rootline_reminders.sql`.
+   In Resend, verify your sending domain (SPF + DKIM, so emails don't land in
+   spam) and set `RESEND_API_KEY` and `TRACKER_EMAIL_FROM`. Set `CRON_SECRET`
+   to a long random string: Vercel sends it automatically to the cron in
+   `vercel.json` (daily at 15:00 UTC ≈ morning in the US). Before going live,
+   preview who would be emailed:
+   `curl -H "Authorization: Bearer $CRON_SECRET" "https://<your-domain>/api/tracker/reminders?dry=1"`
+5. **Env vars** — see `.env.local.example`. `SUPABASE_SERVICE_ROLE_KEY` is
+   required by the webhook and the reminder cron.
+
+## How reminders work
+
+- Only people who have opened `/tracker/app` get them (clinic patients share
+  the same login system and are never emailed).
+- No check-in yet: one "take your baseline" email 2 days after joining.
+- Afterwards: one email when the monthly check-in is due (30 days after the
+  last one) and one follow-up a week later if they still haven't done it.
+  Then nothing until they check in again.
+- Free users who've used all 3 check-ins get an "upgrade and continue"
+  button instead — this is the main path to paid conversions.
+- Users can turn reminders off from the dashboard or with the unsubscribe
+  link (one-click unsubscribe is supported, as Gmail and Yahoo require).
 
 ## Next steps worth building
 
-- Monthly reminder emails (Resend is already a dependency).
 - Wrap as an installable PWA, then App Store / Play Store builds.
 - Pakistan launch: local pricing via JazzCash/Easypaisa, Urdu UI, clinic referral program.

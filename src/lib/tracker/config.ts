@@ -13,7 +13,7 @@ export const CHECKIN_INTERVAL_DAYS = 30;
 
 export const PRICING = {
   monthly: { label: "Monthly", price: "$4.99", per: "/month" },
-  yearly: { label: "Yearly", price: "$39", per: "/year", note: "Save 35%" },
+  yearly: { label: "Yearly", price: "$39", per: "/year", perMonth: "$3.25", note: "Save 35%" },
 } as const;
 
 export type Plan = keyof typeof PRICING;

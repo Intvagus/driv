@@ -40,6 +40,22 @@ export async function getSubscription(
   return { subscription: data, isPro };
 }
 
+/**
+ * The preferences row marks someone as a tracker user (auth is shared with
+ * the clinic site) and holds their reminder opt-in. Created on first visit.
+ */
+export async function ensurePreferences(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+) {
+  const { data } = await supabase.from("tracker_preferences").select("*").eq("user_id", userId).maybeSingle();
+  if (data) return data;
+  await supabase
+    .from("tracker_preferences")
+    .upsert({ user_id: userId }, { onConflict: "user_id", ignoreDuplicates: true });
+  return { user_id: userId, email_reminders: true };
+}
+
 /** All check-ins (newest first) with short-lived signed photo URLs. */
 export async function getCheckins(
   supabase: Awaited<ReturnType<typeof createClient>>,
