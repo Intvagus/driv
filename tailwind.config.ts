@@ -24,6 +24,12 @@ const config: Config = {
         "epi-good": "#0F766E",
         "epi-bg": "#F7F9FB",
         "epi-border": "#E2E8F0",
+        "rl-ink": "#0F1B2D",
+        "rl-primary": "#0F766E",
+        "rl-primary-dark": "#115E59",
+        "rl-accent": "#D97706",
+        "rl-bg": "#F7FAF9",
+        "rl-border": "#E2E8F0",
       },
       fontFamily: {
         sans: ["var(--font-inter)", ...fontFamily.sans],

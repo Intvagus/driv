@@ -62,6 +62,16 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Protect the Rootline tracker app - it has its own sign-in page
+  if (pathname.startsWith("/tracker/app")) {
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/tracker/login";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+  }
+
   return supabaseResponse;
 }
 
