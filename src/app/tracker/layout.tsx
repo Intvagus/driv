@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
+import { ServiceWorker } from "@/components/tracker/ServiceWorker";
 import { APP_NAME, APP_TAGLINE } from "@/lib/tracker/config";
 
 export const metadata: Metadata = {
@@ -19,6 +20,21 @@ export const metadata: Metadata = {
     title: `${APP_NAME} — Hair Loss Progress Tracker`,
     description: APP_TAGLINE,
   },
+  manifest: "/tracker/manifest.webmanifest",
+  applicationName: APP_NAME,
+  appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: "default" },
+  icons: {
+    icon: [
+      { url: "/tracker/icons/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/tracker/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/tracker/icons/apple-touch-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0F766E",
+  viewportFit: "cover",
 };
 
 export default function TrackerLayout({ children }: { children: React.ReactNode }) {
@@ -30,6 +46,7 @@ export default function TrackerLayout({ children }: { children: React.ReactNode 
       >
         Skip to main content
       </a>
+      <ServiceWorker />
       <div id="rl-main" className="flex-1">
         {children}
       </div>

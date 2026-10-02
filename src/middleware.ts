@@ -78,7 +78,8 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // /epi is a self-contained tool with no login/account system — it must
-    // not depend on Supabase being configured, so it's excluded here.
-    "/((?!_next/static|_next/image|favicon.ico|epi(?:/|$)|api/epi(?:/|$)|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // not depend on Supabase being configured, so it's excluded here. The
+    // tracker's PWA files are public and fetched in the background.
+    "/((?!_next/static|_next/image|favicon.ico|epi(?:/|$)|api/epi(?:/|$)|tracker/sw\\.js|tracker/manifest\\.webmanifest|tracker/offline|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

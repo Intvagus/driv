@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Camera, CalendarClock, Sparkles, CheckCircle2 } from "lucide-react";
 import { TodayChecklist } from "@/components/tracker/TodayChecklist";
 import { RemindersToggle } from "@/components/tracker/RemindersToggle";
+import { InstallPrompt } from "@/components/tracker/InstallPrompt";
 import { DeleteCheckinButton } from "@/components/tracker/DeleteCheckinButton";
 import { UpgradeButtons } from "@/components/tracker/UpgradeButtons";
 import { ANGLES, CHECKIN_INTERVAL_DAYS, FREE_CHECKIN_LIMIT, SHEDDING_LABELS } from "@/lib/tracker/config";
@@ -126,6 +127,8 @@ export default async function TrackerDashboard({
           )}
         </section>
       </div>
+
+      <InstallPrompt />
 
       <TodayChecklist />
 
