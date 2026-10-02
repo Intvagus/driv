@@ -1,4 +1,4 @@
-# OP-02 — 301 redirects for the 4 duplicate pairs
+# OP-02 — 301 redirects for the 7 duplicate pairs
 
 Ready to apply once the content-merge step is done — **not before.** A
 301 moves the URL's authority, not its text; whatever's only on the page
@@ -13,7 +13,14 @@ just gone. Checklist per pair:
    to point directly at the new one instead (don't rely on the redirect
    for internal links — it works, but it's an avoidable extra hop).
 
-## The 4 redirects
+## The 7 redirects
+
+The first 4 were found in the initial OP-02 audit; the last 3 were found
+in a follow-up systematic pairwise scan across all 250 URLs (the first
+pass only spot-checked within topic clusters, not across them — these 3
+are the same topic published twice under *different* URL structures:
+standalone vs. nested inside a guide series, which doesn't stand out the
+way a `-2` suffix does).
 
 | Redirect this (loser) | To this (winner) | Why |
 |---|---|---|
@@ -21,6 +28,19 @@ just gone. Checklist per pair:
 | `/does-hair-weigh-anything/` | `/how-much-does-hair-weigh/` | 48 clicks/90d vs 36, better position (6.1 vs 7.1) |
 | `/title-can-progesterone-cause-hair-loss/` | `/progesterone-female-hair-loss/` | 15 clicks/90d vs 6; loser's slug still has a leftover "title-" prefix from a bad import |
 | `/does-zyn-cause-hair-loss/` | `/does-zyn-cause-hair-loss-2/` | 50 clicks/90d vs 25 — the "-2" URL is the stronger one despite the uglier slug; don't rename it, that just creates another redirect to manage |
+| `/hair-transplant-cost-in-islamabad/` | `/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-islamabad/` | Same topic, standalone vs nested under the pricing hub. Nested wins: 35 clicks/90d vs 4, position 30 vs 57 |
+| `/hair-transplant-donor-area-complete-guide/pimples-on-donor-area-after-hair-transplant/` | `/pimples-on-the-donor-area-after-hair-transplant/` | Same topic, nearly identical title, nested in a guide series vs standalone. Standalone wins: 16 clicks/90d vs 3 |
+| `/foods-that-increase-dht/` | `/foods-that-increase-dht-production/` | Near-identical diet/DHT content. Winner: 64 clicks/90d vs 23, position 11.4 vs 22.2 |
+
+## Not a redirect — a cannibalization issue, flagged separately
+
+`/hair-transplant-cost-in-pakistan/` and `/updated-hair-transplant-prices-in-pakistan/`
+compete for the same pricing intent (214 clicks/pos 11 vs 12 clicks/pos
+51), but the weaker page is also the parent hub for the city-specific
+pricing subpages (Islamabad, Lahore, Karachi, etc.) — redirecting it away
+would orphan those. This needs a content decision (which page becomes the
+pricing pillar), not a redirect rule. Marked `Needs review` in the
+tracker rather than `Merge/301`.
 
 ---
 
@@ -39,6 +59,9 @@ Rank Math's redirects are visible/editable/reversible from wp-admin.
 | `/does-hair-weigh-anything/` | `https://drranairfan.com/how-much-does-hair-weigh/` | 301 Permanent Redirect |
 | `/title-can-progesterone-cause-hair-loss/` | `https://drranairfan.com/progesterone-female-hair-loss/` | 301 Permanent Redirect |
 | `/does-zyn-cause-hair-loss/` | `https://drranairfan.com/does-zyn-cause-hair-loss-2/` | 301 Permanent Redirect |
+| `/hair-transplant-cost-in-islamabad/` | `https://drranairfan.com/hair-transplant-cost-in-pakistan/hair-transplant-cost-in-islamabad/` | 301 Permanent Redirect |
+| `/hair-transplant-donor-area-complete-guide/pimples-on-donor-area-after-hair-transplant/` | `https://drranairfan.com/pimples-on-the-donor-area-after-hair-transplant/` | 301 Permanent Redirect |
+| `/foods-that-increase-dht/` | `https://drranairfan.com/foods-that-increase-dht-production/` | 301 Permanent Redirect |
 
 Source URL in Rank Math's redirect manager is typically entered as the
 relative path (as shown) — it matches against the request path regardless
@@ -58,6 +81,9 @@ RewriteRule ^can-low-blood-pressure-cause-hair-loss/?$ /low-blood-pressure-and-h
 RewriteRule ^does-hair-weigh-anything/?$ /how-much-does-hair-weigh/ [R=301,L]
 RewriteRule ^title-can-progesterone-cause-hair-loss/?$ /progesterone-female-hair-loss/ [R=301,L]
 RewriteRule ^does-zyn-cause-hair-loss/?$ /does-zyn-cause-hair-loss-2/ [R=301,L]
+RewriteRule ^hair-transplant-cost-in-islamabad/?$ /hair-transplant-cost-in-pakistan/hair-transplant-cost-in-islamabad/ [R=301,L]
+RewriteRule ^hair-transplant-donor-area-complete-guide/pimples-on-donor-area-after-hair-transplant/?$ /pimples-on-the-donor-area-after-hair-transplant/ [R=301,L]
+RewriteRule ^foods-that-increase-dht/?$ /foods-that-increase-dht-production/ [R=301,L]
 ```
 
 Back up `.htaccess` before editing it — a broken rule here can take the
