@@ -18,20 +18,21 @@ something is unconfirmed, it's marked — don't fill it in without checking.
 
 > **About the Author**
 >
-> **Dr. Rana Irfan** is a hair restoration surgeon based in Islamabad, Pakistan, with over 25 years of experience in FUE, DHI, and Sapphire FUE hair transplantation. He is the **Immediate Past President of the American Board of Hair Restoration Surgery (ABHRS)** and a **Fellow of the International Society of Hair Restoration Surgery (FISHRS)**.
+> **Dr. Rana Irfan** is a hair restoration surgeon based in Islamabad, Pakistan, with over 25 years of experience in FUE, DHI, and Sapphire FUE hair transplantation. He is an ABHRS Diplomate and the **first non-American to serve as President of the American Board of Hair Restoration Surgery (ABHRS), USA** — he is currently its Immediate Past President. He is also a **Fellow of the International Society of Hair Restoration Surgery (FISHRS)** and **President (2025) of the Hair Restoration Society of Pakistan (HRSP)**.
 >
-> [ABHRS Profile](https://abhrs.org/directory/listing/rana-irfan-md) · [ISHRS Profile](https://ishrs.org/doctor/594807/) · [Instagram](https://instagram.com/hairtransplantisb/) · [X/Twitter](https://x.com/RanaIrfanDr)
+> [ABHRS Profile](https://abhrs.org/directory/listing/rana-irfan-md) · [ISHRS Profile](https://ishrs.org/doctor/594807/) · [IMCAS Profile](https://www.imcas.com/en/profile/dr-rana-irfan-2) · [Instagram](https://instagram.com/hairtransplantisb/) · [X/Twitter](https://x.com/RanaIrfanDr)
 
 **Short version (for a "Medically reviewed by" line at the top of a post):**
 
-> Medically reviewed by **Dr. Rana Irfan**, Immediate Past President, ABHRS · FISHRS
+> Medically reviewed by **Dr. Rana Irfan**, ABHRS Diplomate, Immediate Past President ABHRS · FISHRS · President HRSP
 
-*Not included above, flagged instead of asserted:* the tracker's OP-09
-notes and some search results also describe him as President of the Hair
-Restoration Society of Pakistan (HRSP) and credit him with 25,000+
-procedures. Neither was independently confirmed in this session (same
-caveat as the `OFF-09` press pitch draft) — add them once confirmed,
-don't carry them over from search-result summaries alone.
+**Update 2026-10-06**: the HRSP presidency and the "first non-American
+ABHRS President" detail are now confirmed — the user shared Dr. Irfan's
+IMCAS profile (imcas.com/en/profile/dr-rana-irfan-2), which independently
+states both. Previously both were withheld pending confirmation; now
+included. Still not independently confirmed: a specific procedure count
+(25,000+ appeared only in a search-result summary, never a primary
+source) — left out, don't add it without a better source.
 
 ---
 
