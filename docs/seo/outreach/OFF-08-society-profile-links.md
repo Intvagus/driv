@@ -64,10 +64,46 @@ Profile: https://ishrs.org/doctor/594807/
 
 ---
 
+## 3. IMCAS (International Master Course on Aging Science)
+
+Profile: https://www.imcas.com/en/profile/dr-rana-irfan-2
+
+Confirmed by the user (2026-10-06): this is a real, well-populated
+profile — detailed bio, "Main interests" tags — but **no website link**
+on it anywhere. IMCAS is a legitimate, long-established international
+dermatology/aesthetic medicine conference organization (founded 1994,
+acquired by Comexposium 2018, 11,500+ annual attendees), so this is worth
+getting a link on — same tier of opportunity as ABHRS/ISHRS.
+
+**Try self-service first**: the page has a "Sign in" option in its top
+nav, which suggests IMCAS profiles may be editable directly by the
+member once logged into their own IMCAS account — check whether Dr.
+Irfan (or whoever registered for IMCAS originally) can log in and add
+the website link themselves before falling back to an outreach email.
+
+**If self-service isn't available, fall back to this:**
+
+**Subject:** Website link addition request — Dr. Rana Irfan profile
+
+**Body:**
+
+> Dear IMCAS team,
+>
+> I'm writing on behalf of Dr. Rana Irfan (https://www.imcas.com/en/profile/dr-rana-irfan-2) to ask you to add his practice website to his profile, which currently has none listed.
+>
+> Website: https://drranairfan.com/
+>
+> Thank you for your time,
+> [Name / title]
+> Vagus Surgery Clinic, Islamabad
+
+---
+
 ## Still needed before this item can close
 
 - HRSP, IBHRS, FACS profile URLs — not yet located/verified.
 - Confirmation (from the society, or from someone who can view the live
-  page) of whether the link was actually added.
+  page) of whether each link was actually added — including IMCAS, which
+  is confirmed to currently have none.
 - Update this file's status line, and the Off-Page SEO Issue tab (`OFF-08`),
   once sent and once confirmed.
