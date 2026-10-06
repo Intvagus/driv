@@ -64,46 +64,44 @@ Profile: https://ishrs.org/doctor/594807/
 
 ---
 
-## 3. IMCAS (International Master Course on Aging Science)
+## 3. IMCAS (International Master Course on Aging Science) — DONE, no outreach needed
 
 Profile: https://www.imcas.com/en/profile/dr-rana-irfan-2
 
-Confirmed by the user (2026-10-06): this is a real, well-populated
-profile — detailed bio, "Main interests" tags — but **no website link**
-on it anywhere. IMCAS is a legitimate, long-established international
-dermatology/aesthetic medicine conference organization (founded 1994,
-acquired by Comexposium 2018, 11,500+ annual attendees), so this is worth
-getting a link on — same tier of opportunity as ABHRS/ISHRS.
+Status corrected 2026-10-06 after the user checked directly: this
+profile already carries a live "Home" icon linking to the website, plus
+icons linking to Dr. Rana Irfan's actual Instagram, LinkedIn, and
+Facebook. **No outreach needed here — the link already exists.** (Earlier
+version of this section asked to request a link; that was based on an
+initial "no link visible" read of a screenshot that didn't show the full
+page — corrected once the user looked more carefully.)
 
-**Try self-service first**: the page has a "Sign in" option in its top
-nav, which suggests IMCAS profiles may be editable directly by the
-member once logged into their own IMCAS account — check whether Dr.
-Irfan (or whoever registered for IMCAS originally) can log in and add
-the website link themselves before falling back to an outreach email.
+IMCAS is a legitimate, long-established international dermatology/
+aesthetic medicine conference organization (founded 1994, acquired by
+Comexposium 2018, 11,500+ annual attendees) — this is a genuinely good
+backlink already in place, same tier as ABHRS/ISHRS.
 
-**If self-service isn't available, fall back to this:**
+**What's actually left**: the page isn't indexed by Google yet (checked
+via `site:` search, 2026-10-06 — no results). Getting it indexed isn't
+something you can request directly (you don't own imcas.com in Search
+Console), but linking to it *from* drranairfan.com — e.g. in a
+"Credentials & Affiliations" section alongside the ABHRS/ISHRS links —
+both speeds up discovery and reinforces the entity association in both
+directions. See `OP-12`.
 
-**Subject:** Website link addition request — Dr. Rana Irfan profile
-
-**Body:**
-
-> Dear IMCAS team,
->
-> I'm writing on behalf of Dr. Rana Irfan (https://www.imcas.com/en/profile/dr-rana-irfan-2) to ask you to add his practice website to his profile, which currently has none listed.
->
-> Website: https://drranairfan.com/
->
-> Thank you for your time,
-> [Name / title]
-> Vagus Surgery Clinic, Islamabad
+**Bonus, not required**: if you can get exact URLs for the Instagram/
+LinkedIn/Facebook icons on this page (right-click → copy link, or hover
+and read the status bar), that would help resolve `OFF-06` — the live
+WordPress site currently links to the *wrong* Instagram handle
+(`instagram.com/doctorranairfan/` instead of `instagram.com/hairtransplantisb/`),
+and a third-party confirmation of which one is current would settle it.
 
 ---
 
 ## Still needed before this item can close
 
 - HRSP, IBHRS, FACS profile URLs — not yet located/verified.
-- Confirmation (from the society, or from someone who can view the live
-  page) of whether each link was actually added — including IMCAS, which
-  is confirmed to currently have none.
+- Confirmation of whether the ABHRS/ISHRS link requests (above) actually
+  landed — IMCAS is already confirmed good, no action needed there.
 - Update this file's status line, and the Off-Page SEO Issue tab (`OFF-08`),
-  once sent and once confirmed.
+  once the ABHRS/ISHRS outreach is sent and confirmed.
