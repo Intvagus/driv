@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Camera, ImagePlus, Check, ArrowLeft, ArrowRight } from "lucide-react";
 import { createTrackerClient as createClient } from "@/lib/tracker/supabase";
 import { compressImage } from "@/lib/tracker/image";
+import { CameraCapture } from "./CameraCapture";
 import { localDateIso } from "@/lib/tracker/dates";
 import { ANGLES, PHOTO_BUCKET, SHEDDING_LABELS, type Angle } from "@/lib/tracker/config";
 
@@ -26,18 +27,36 @@ export function NewCheckinForm({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
+  // Live camera with last month's photo overlaid, where the browser allows
+  // it; otherwise (or if it fails) the phone's own camera via a file input.
+  const [liveCamera, setLiveCamera] = useState(false);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  useEffect(() => {
+    setLiveCamera(!!navigator.mediaDevices?.getUserMedia && window.isSecureContext);
+  }, []);
+  const closeCamera = useCallback(() => setCameraOpen(false), []);
+  const cameraUnavailable = useCallback(() => {
+    setCameraOpen(false);
+    setLiveCamera(false);
+    setError("Couldn't open the camera here. Use \"Take photo\" again to open your phone's camera instead.");
+  }, []);
+
   const angle = ANGLES[step];
   const isDetails = step === ANGLES.length;
   const shotCount = Object.keys(shots).length;
+
+  const setShot = (blob: Blob) => {
+    if (!angle) return;
+    const prev = shots[angle.id];
+    if (prev) URL.revokeObjectURL(prev.preview);
+    setShots({ ...shots, [angle.id]: { blob, preview: URL.createObjectURL(blob) } });
+  };
 
   const onFile = async (file: File | undefined) => {
     if (!file || !angle) return;
     setError("");
     try {
-      const blob = await compressImage(file);
-      const prev = shots[angle.id];
-      if (prev) URL.revokeObjectURL(prev.preview);
-      setShots({ ...shots, [angle.id]: { blob, preview: URL.createObjectURL(blob) } });
+      setShot(await compressImage(file));
     } catch {
       setError("Couldn't read that photo. Try a JPG or PNG.");
     }
@@ -96,6 +115,18 @@ export function NewCheckinForm({
 
   return (
     <div className="mx-auto max-w-xl">
+      {cameraOpen && angle && (
+        <CameraCapture
+          label={angle.label}
+          reference={reference[angle.id]}
+          onCapture={(blob) => {
+            setShot(blob);
+            setCameraOpen(false);
+          }}
+          onClose={closeCamera}
+          onUnavailable={cameraUnavailable}
+        />
+      )}
       {/* Progress */}
       <ol className="mb-6 grid grid-cols-5 gap-1.5" aria-label="Check-in steps">
         {[...ANGLES.map((a) => a.label), "Details"].map((label, i) => (
@@ -152,19 +183,32 @@ export function NewCheckinForm({
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-rl-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-rl-primary-dark">
-              <Camera className="h-4 w-4" aria-hidden /> {shots[angle.id] ? "Retake" : "Take photo"}
-              <input
-                type="file"
-                accept="image/*"
-                capture="environment"
-                className="sr-only"
-                onChange={(e) => {
-                  onFile(e.target.files?.[0]);
-                  e.target.value = "";
+            {liveCamera ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setError("");
+                  setCameraOpen(true);
                 }}
-              />
-            </label>
+                className="flex items-center justify-center gap-2 rounded-lg bg-rl-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-rl-primary-dark"
+              >
+                <Camera className="h-4 w-4" aria-hidden /> {shots[angle.id] ? "Retake" : "Take photo"}
+              </button>
+            ) : (
+              <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-rl-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-rl-primary-dark">
+                <Camera className="h-4 w-4" aria-hidden /> {shots[angle.id] ? "Retake" : "Take photo"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="sr-only"
+                  onChange={(e) => {
+                    onFile(e.target.files?.[0]);
+                    e.target.value = "";
+                  }}
+                />
+              </label>
+            )}
             <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-rl-border px-4 py-2.5 text-sm font-semibold hover:bg-slate-50">
               <ImagePlus className="h-4 w-4" aria-hidden /> Upload
               <input

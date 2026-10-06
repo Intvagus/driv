@@ -12,7 +12,7 @@ const FEATURES = [
   {
     icon: Camera,
     title: "Guided monthly photos",
-    body: "Four standard angles with framing tips and last month's photo as a reference, so every shot is comparable.",
+    body: "Four standard angles with framing tips, and last month's photo laid over the live camera so every shot lines up.",
   },
   {
     icon: Columns2,
