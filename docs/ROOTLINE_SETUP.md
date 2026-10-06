@@ -18,6 +18,9 @@ It shares Supabase auth with the clinic site but uses only its own
 | `/tracker/app/account` | Plan, billing link, reminders, support/legal links, delete account |
 | `/tracker/privacy`, `/tracker/terms`, `/tracker/refunds` | Legal pages (linked in the footer and at sign-up) |
 | `/tracker/guides`, `/tracker/guides/[slug]` | 5 SEO articles (content in `src/lib/tracker/guides.ts`) |
+| `/tracker/clinics` | Page for clinics + QR card maker |
+| `/tracker/clinics/card?name=…` | Printable sheet of 10 QR cards (US Letter) |
+| `/tracker/r/<code>` | Clinic referral link printed on the cards |
 | `/api/tracker/account/delete` | Deletes all of a user's tracker data and photos |
 | `/api/tracker/checkout` | Redirects to Lemon Squeezy checkout with the user id attached |
 | `/api/tracker/webhook` | Lemon Squeezy webhook → `tracker_subscriptions` |
@@ -69,8 +72,34 @@ and in Lemon Squeezy (actual charge) — keep them matching.
    `vercel.json` (daily at 15:00 UTC ≈ morning in the US). Before going live,
    preview who would be emailed:
    `curl -H "Authorization: Bearer $CRON_SECRET" "https://<your-domain>/api/tracker/reminders?dry=1"`
-5. **Env vars** — see `.env.local.example`. `SUPABASE_SERVICE_ROLE_KEY` is
+5. **Clinic referrals**: run `supabase/migrations/004_rootline_referrals.sql`.
+6. **Env vars** — see `.env.local.example`. `SUPABASE_SERVICE_ROLE_KEY` is
    required by the webhook and the reminder cron.
+
+## Clinic program
+
+Clinics make their own cards at `/tracker/clinics`: they type the clinic name
+and print 10 QR cards on one US Letter sheet (print at 100% scale). Each QR
+code opens `/tracker/r/<clinic-code>`, where the code comes from the clinic
+name (e.g. `bright-hair-clinic-austin`). That page sets a 90-day cookie, and the
+first time the visitor opens the app, `tracker_preferences.referred_by` records
+the clinic. Clinics never get access to patient data.
+
+Sign-ups and paying users per clinic (Supabase SQL editor):
+
+```sql
+select p.referred_by as clinic,
+       count(*) as signups,
+       count(s.user_id) filter (where s.status in ('active', 'on_trial')) as paying
+from tracker_preferences p
+left join tracker_subscriptions s using (user_id)
+where p.referred_by is not null
+group by 1
+order by 2 desc;
+```
+
+Only share the counts with a clinic, never names or emails. That's what the
+privacy policy promises.
 
 ## SEO guides
 

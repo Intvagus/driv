@@ -66,6 +66,10 @@ export default function TrackerLayout({ children }: { children: React.ReactNode 
             Guides
           </Link>{" "}
           ·{" "}
+          <Link href="/tracker/clinics" className="hover:underline">
+            For clinics
+          </Link>{" "}
+          ·{" "}
           <Link href="/tracker/privacy" className="hover:underline">
             Privacy
           </Link>{" "}

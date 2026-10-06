@@ -1,7 +1,9 @@
 import "server-only";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createTrackerServerClient as createClient } from "@/lib/tracker/supabase-server";
 import { PHOTO_BUCKET, type Angle } from "./config";
+import { REF_COOKIE, isValidRef } from "./referral";
 
 export type CheckinWithPhotos = {
   id: string;
@@ -42,7 +44,8 @@ export async function getSubscription(
 
 /**
  * The preferences row marks someone as a tracker user (auth is shared with
- * the clinic site) and holds their reminder opt-in. Created on first visit.
+ * the clinic site) and holds their reminder opt-in and referring clinic.
+ * Created on first visit.
  */
 export async function ensurePreferences(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -50,9 +53,14 @@ export async function ensurePreferences(
 ) {
   const { data } = await supabase.from("tracker_preferences").select("*").eq("user_id", userId).maybeSingle();
   if (data) return data;
+  // First visit: credit the clinic whose link or QR card brought them in.
+  const ref = (await cookies()).get(REF_COOKIE)?.value;
   await supabase
     .from("tracker_preferences")
-    .upsert({ user_id: userId }, { onConflict: "user_id", ignoreDuplicates: true });
+    .upsert(
+      { user_id: userId, referred_by: isValidRef(ref) ? ref : null },
+      { onConflict: "user_id", ignoreDuplicates: true }
+    );
   return { user_id: userId, email_reminders: true };
 }
 

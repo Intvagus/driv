@@ -45,9 +45,19 @@ const FAQ = [
   },
 ];
 
-export default function TrackerLanding({ searchParams }: { searchParams: { deleted?: string } }) {
+export default function TrackerLanding({
+  searchParams,
+}: {
+  searchParams: { deleted?: string; from?: string };
+}) {
   return (
     <>
+      {searchParams.from === "clinic" && (
+        <div role="status" className="bg-rl-primary px-4 py-3 text-center text-sm text-white">
+          Welcome! Your clinic recommends taking monthly progress photos. Start with your baseline today. It&apos;s
+          free.
+        </div>
+      )}
       {searchParams.deleted && (
         <div role="status" className="bg-rl-ink px-4 py-3 text-center text-sm text-white">
           {searchParams.deleted === "account"

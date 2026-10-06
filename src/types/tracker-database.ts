@@ -172,6 +172,7 @@ export type TrackerDatabase = {
           reminders_in_cycle: number;
           last_reminder_at: string | null;
           created_at: string;
+          referred_by: string | null;
         };
         Insert: {
           user_id: string;
@@ -180,6 +181,7 @@ export type TrackerDatabase = {
           reminders_in_cycle?: number;
           last_reminder_at?: string | null;
           created_at?: string;
+          referred_by?: string | null;
         };
         Update: {
           user_id?: string;
@@ -188,6 +190,7 @@ export type TrackerDatabase = {
           reminders_in_cycle?: number;
           last_reminder_at?: string | null;
           created_at?: string;
+          referred_by?: string | null;
         };
         Relationships: [];
       };

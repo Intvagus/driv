@@ -40,6 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const trackerPages = [
     "/tracker",
     "/tracker/guides",
+    "/tracker/clinics",
     "/tracker/privacy",
     "/tracker/terms",
     "/tracker/refunds",

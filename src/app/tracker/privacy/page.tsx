@@ -36,9 +36,15 @@ export default function PrivacyPage() {
           reseller, Lemon Squeezy, which acts as the merchant of record. We never see or store your card number.
         </li>
         <li>
+          <strong>Referring clinic:</strong> if you arrived through a clinic&apos;s link or QR card, which clinic
+          referred you (kept in a cookie for up to 90 days until you start using the app). Clinics may ask us how
+          many people joined through their card. We tell them a number only, never who you are, and never share
+          your photos or health information with them.
+        </li>
+        <li>
           <strong>Technical data:</strong> standard server logs (such as IP address, browser type and time of
-          request) kept for security and troubleshooting, and cookies that keep you signed in. We don&apos;t use
-          advertising or cross-site tracking cookies.
+          request) kept for security and troubleshooting, and cookies that keep you signed in or remember a
+          referring clinic. We don&apos;t use advertising or cross-site tracking cookies.
         </li>
       </ul>
 
