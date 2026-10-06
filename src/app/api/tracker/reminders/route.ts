@@ -4,6 +4,7 @@ import { createTrackerAdminClient } from "@/lib/tracker/supabase-server";
 import { decideReminder, reminderEmail, type ReminderKind } from "@/lib/tracker/reminders";
 import { oneClickUnsubscribeUrl, unsubscribePageUrl } from "@/lib/tracker/unsubscribe";
 import { APP_NAME, FREE_CHECKIN_LIMIT } from "@/lib/tracker/config";
+import { TRACKER_ORIGIN } from "@/lib/tracker/urls";
 
 // Daily cron (see vercel.json): emails users whose monthly check-in is due.
 // Call with `Authorization: Bearer $CRON_SECRET`; add `?dry=1` to see who
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
   }
 
   const dryRun = request.nextUrl.searchParams.get("dry") === "1";
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin).replace(/\/$/, "");
+  const siteUrl = TRACKER_ORIGIN;
   const from = process.env.TRACKER_EMAIL_FROM;
   if (!dryRun && (!process.env.RESEND_API_KEY || !from)) {
     return new NextResponse("RESEND_API_KEY and TRACKER_EMAIL_FROM must be set", { status: 503 });

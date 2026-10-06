@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { trackerPath } from "@/lib/tracker/urls";
 import Link from "next/link";
 import { CalendarCheck, FileText, Lock, QrCode } from "lucide-react";
 import { GuidesHeader } from "@/components/tracker/GuidesHeader";
@@ -7,7 +8,7 @@ import { APP_NAME, FREE_CHECKIN_LIMIT, LEGAL, PRICING } from "@/lib/tracker/conf
 export const metadata: Metadata = {
   title: { absolute: `For Clinics — ${APP_NAME}` },
   description: `Free QR cards that help your hair transplant and hair loss patients track their growth month by month, and bring consistent photos to follow-ups.`,
-  alternates: { canonical: "/tracker/clinics" },
+  alternates: { canonical: trackerPath("/tracker/clinics") },
 };
 
 const STEPS = [

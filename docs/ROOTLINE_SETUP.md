@@ -34,6 +34,37 @@ Free plan: 3 check-ins (enforced in the database by RLS). Pro: unlimited
 check-ins + report. Prices are set in `src/lib/tracker/config.ts` (display)
 and in Lemon Squeezy (actual charge) — keep them matching.
 
+## Own domain (recommended)
+
+Rootline can run on its own domain from this same Vercel project:
+
+1. Buy the domain, then in Vercel → this project → Settings → Domains, add it
+   (and `www.` if you like). Keep the clinic domain as it is.
+2. Set `NEXT_PUBLIC_TRACKER_URL=https://<rootline-domain>` (no trailing slash)
+   and redeploy. It's read at build time, so a redeploy is required.
+3. Supabase → Authentication → URL Configuration: add
+   `https://<rootline-domain>/auth/callback` to the redirect URLs.
+4. Lemon Squeezy: post-purchase redirect `https://<rootline-domain>/app?upgraded=1`,
+   webhook `https://<rootline-domain>/api/tracker/webhook`.
+5. Resend: verify the Rootline domain and send reminders from it
+   (`TRACKER_EMAIL_FROM=Rootline <reminders@<rootline-domain>>`).
+6. Print clinic cards only after this. Their QR codes use the domain set at
+   build time.
+
+What changes once it's set:
+- `<rootline-domain>/` is the landing page, and short paths work
+  (`/guides`, `/clinics`, `/app`, `/r/<clinic>`). Some in-app pages still show
+  `/tracker/...` in the address bar; that's harmless.
+- Emails, QR codes, canonical links, `robots.txt` and `sitemap.xml` on the
+  Rootline domain use the short paths. The clinic sitemap stops listing
+  Rootline pages.
+- Any `/tracker/...` link on the clinic domain permanently redirects to the
+  Rootline domain, so old links and cards keep working.
+- Clinic-site pages are not reachable on the Rootline domain (they return 404).
+- Sign-ins are per domain, so anyone signed in at the old address signs in once more.
+
+Without `NEXT_PUBLIC_TRACKER_URL`, everything stays at `<clinic-domain>/tracker`.
+
 ## Launch checklist
 
 0. **Legal pages** — set `NEXT_PUBLIC_TRACKER_COMPANY_NAME` (your legal

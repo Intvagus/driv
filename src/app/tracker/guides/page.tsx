@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { trackerPath } from "@/lib/tracker/urls";
 import Link from "next/link";
 import { GuidesHeader } from "@/components/tracker/GuidesHeader";
 import { APP_NAME } from "@/lib/tracker/config";
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   title: { absolute: `Hair Progress Guides — ${APP_NAME}` },
   description:
     "Practical guides to tracking hair loss treatment: consistent progress photos, minoxidil and finasteride timelines, and hair transplant growth.",
-  alternates: { canonical: "/tracker/guides" },
+  alternates: { canonical: trackerPath("/tracker/guides") },
 };
 
 export default function GuidesIndex() {

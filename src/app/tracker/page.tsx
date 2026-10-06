@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Camera, Columns2, Pill, FileText, Lock, Check } from "lucide-react";
 import { RootlineLogo } from "@/components/tracker/Logo";
 import { APP_NAME, APP_TAGLINE, FREE_CHECKIN_LIMIT, PRICING } from "@/lib/tracker/config";
+
+import { trackerPath } from "@/lib/tracker/urls";
+
+export const metadata: Metadata = { alternates: { canonical: trackerPath("/tracker") } };
 
 const FEATURES = [
   {

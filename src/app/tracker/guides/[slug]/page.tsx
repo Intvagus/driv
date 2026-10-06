@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { trackerPath } from "@/lib/tracker/urls";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Camera, Info } from "lucide-react";
@@ -16,7 +17,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title: { absolute: `${guide.title} | ${APP_NAME}` },
     description: guide.description,
-    alternates: { canonical: `/tracker/guides/${guide.slug}` },
+    alternates: { canonical: trackerPath(`/tracker/guides/${guide.slug}`) },
     // Medical guides stay out of search until a reviewer has signed off.
     robots: isIndexable(guide) ? undefined : { index: false, follow: true },
     openGraph: { type: "article", title: guide.title, description: guide.description, siteName: APP_NAME },

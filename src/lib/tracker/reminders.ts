@@ -1,4 +1,5 @@
 import { APP_NAME, CHECKIN_INTERVAL_DAYS, FREE_CHECKIN_LIMIT, PRICING } from "./config";
+import { trackerPath } from "./urls";
 
 const DAY_MS = 86_400_000;
 // Nudge new users to take baseline photos this long after they join.
@@ -84,7 +85,10 @@ export function reminderEmail({
 
   const cta = atFreeLimit
     ? { label: "Upgrade and continue", href: `${siteUrl}/api/tracker/checkout?plan=yearly` }
-    : { label: kind === "baseline" ? "Take baseline photos" : "Start check-in", href: `${siteUrl}/tracker/app/new` };
+    : {
+        label: kind === "baseline" ? "Take baseline photos" : "Start check-in",
+        href: `${siteUrl}${trackerPath("/tracker/app/new")}`,
+      };
 
   const text = [
     intro,

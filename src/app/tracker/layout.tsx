@@ -2,10 +2,10 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { ServiceWorker } from "@/components/tracker/ServiceWorker";
 import { APP_NAME, APP_TAGLINE } from "@/lib/tracker/config";
-import { SITE_URL } from "@/lib/constants";
+import { TRACKER_ORIGIN } from "@/lib/tracker/urls";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(TRACKER_ORIGIN),
   title: { absolute: `${APP_NAME} — Hair Loss Progress Tracker` },
   description: `${APP_TAGLINE} Guided scalp photos, side-by-side comparisons, treatment reminders and doctor-ready reports.`,
   keywords: [

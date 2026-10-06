@@ -1,5 +1,6 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "crypto";
+import { trackerPath } from "./urls";
 
 // Unsubscribe links carry the user id plus an HMAC of it, so they work
 // without signing in but can't be forged for someone else.
@@ -21,7 +22,7 @@ export function verifyUnsubscribeToken(userId: string, token: string) {
 }
 
 export function unsubscribePageUrl(siteUrl: string, userId: string) {
-  return `${siteUrl}/tracker/unsubscribe?u=${userId}&t=${unsubscribeToken(userId)}`;
+  return `${siteUrl}${trackerPath("/tracker/unsubscribe")}?u=${userId}&t=${unsubscribeToken(userId)}`;
 }
 
 /** Endpoint for RFC 8058 one-click unsubscribe (List-Unsubscribe-Post). */

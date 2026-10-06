@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import QRCode from "qrcode";
 import { PrintButton } from "@/components/tracker/PrintButton";
-import { SITE_URL } from "@/lib/constants";
 import { APP_NAME, FREE_CHECKIN_LIMIT } from "@/lib/tracker/config";
 import { refFromName } from "@/lib/tracker/referral";
+import { trackerUrl } from "@/lib/tracker/urls";
 
 export const metadata: Metadata = {
   title: { absolute: `Clinic QR Cards — ${APP_NAME}` },
@@ -44,7 +44,7 @@ export default async function ClinicCardPage({
     );
   }
 
-  const url = `${SITE_URL.replace(/\/$/, "")}/tracker/r/${code}`;
+  const url = trackerUrl(`/tracker/r/${code}`);
   // SVG markup produced by the qrcode library from our own URL (no user HTML).
   const qrSvg = await QRCode.toString(url, { type: "svg", margin: 0, errorCorrectionLevel: "M", color: { dark: "#0F1B2D", light: "#FFFFFF" } });
 

@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { SITE_URL, PROCEDURES, CONDITIONS } from "@/lib/constants";
-import { GUIDES, isIndexable } from "@/lib/tracker/guides";
+import { TRACKER_PUBLIC_PATHS } from "@/lib/tracker/public-paths";
+import { TRACKER_OWN_DOMAIN } from "@/lib/tracker/urls";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
@@ -35,22 +36,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  // Rootline tracker: public pages only. Medical guides are listed once a
-  // reviewer has signed off (see src/lib/tracker/guides.ts).
-  const trackerPages = [
-    "/tracker",
-    "/tracker/guides",
-    "/tracker/clinics",
-    "/tracker/privacy",
-    "/tracker/terms",
-    "/tracker/refunds",
-    ...GUIDES.filter(isIndexable).map((g) => `/tracker/guides/${g.slug}`),
-  ].map((path) => ({
-    url: `${SITE_URL}${path}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: path === "/tracker" ? 0.9 : 0.6,
-  }));
+  // Rootline's public pages, unless it has its own domain (then they're in
+  // that domain's /sitemap.xml instead).
+  const trackerPages = TRACKER_OWN_DOMAIN
+    ? []
+    : TRACKER_PUBLIC_PATHS.map((path) => ({
+        url: `${SITE_URL}${path}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly" as const,
+        priority: path === "/tracker" ? 0.9 : 0.6,
+      }));
 
   return [...staticPages, ...procedurePages, ...conditionPages, ...trackerPages];
 }
