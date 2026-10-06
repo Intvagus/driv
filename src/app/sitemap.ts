@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { SITE_URL, PROCEDURES, CONDITIONS } from "@/lib/constants";
+import { GUIDES, isIndexable } from "@/lib/tracker/guides";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
@@ -34,5 +35,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...procedurePages, ...conditionPages];
+  // Rootline tracker: public pages only. Medical guides are listed once a
+  // reviewer has signed off (see src/lib/tracker/guides.ts).
+  const trackerPages = [
+    "/tracker",
+    "/tracker/guides",
+    "/tracker/privacy",
+    "/tracker/terms",
+    "/tracker/refunds",
+    ...GUIDES.filter(isIndexable).map((g) => `/tracker/guides/${g.slug}`),
+  ].map((path) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: path === "/tracker" ? 0.9 : 0.6,
+  }));
+
+  return [...staticPages, ...procedurePages, ...conditionPages, ...trackerPages];
 }

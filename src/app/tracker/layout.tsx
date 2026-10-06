@@ -2,8 +2,10 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { ServiceWorker } from "@/components/tracker/ServiceWorker";
 import { APP_NAME, APP_TAGLINE } from "@/lib/tracker/config";
+import { SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: { absolute: `${APP_NAME} — Hair Loss Progress Tracker` },
   description: `${APP_TAGLINE} Guided scalp photos, side-by-side comparisons, treatment reminders and doctor-ready reports.`,
   keywords: [
@@ -58,6 +60,10 @@ export default function TrackerLayout({ children }: { children: React.ReactNode 
         <p className="mt-2">
           <Link href="/tracker" className="hover:underline">
             Home
+          </Link>{" "}
+          ·{" "}
+          <Link href="/tracker/guides" className="hover:underline">
+            Guides
           </Link>{" "}
           ·{" "}
           <Link href="/tracker/privacy" className="hover:underline">

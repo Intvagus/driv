@@ -17,6 +17,7 @@ It shares Supabase auth with the clinic site but uses only its own
 | `/tracker/app/report` | Printable doctor report (Pro) |
 | `/tracker/app/account` | Plan, billing link, reminders, support/legal links, delete account |
 | `/tracker/privacy`, `/tracker/terms`, `/tracker/refunds` | Legal pages (linked in the footer and at sign-up) |
+| `/tracker/guides`, `/tracker/guides/[slug]` | 5 SEO articles (content in `src/lib/tracker/guides.ts`) |
 | `/api/tracker/account/delete` | Deletes all of a user's tracker data and photos |
 | `/api/tracker/checkout` | Redirects to Lemon Squeezy checkout with the user id attached |
 | `/api/tracker/webhook` | Lemon Squeezy webhook → `tracker_subscriptions` |
@@ -70,6 +71,20 @@ and in Lemon Squeezy (actual charge) — keep them matching.
    `curl -H "Authorization: Bearer $CRON_SECRET" "https://<your-domain>/api/tracker/reminders?dry=1"`
 5. **Env vars** — see `.env.local.example`. `SUPABASE_SERVICE_ROLE_KEY` is
    required by the webhook and the reminder cron.
+
+## SEO guides
+
+Five articles live in `src/lib/tracker/guides.ts`. Two need no medical review
+(taking progress photos, choosing a tracker app) and are in the sitemap now.
+The other three (minoxidil, finasteride, hair transplant timeline) make health
+statements. They stay `noindex` and out of the sitemap until a qualified doctor
+has reviewed them and you set `NEXT_PUBLIC_TRACKER_MEDICAL_REVIEWER` (e.g.
+`Dr. Rana Irfan, FCPS`). The name then shows on each article and in its
+structured data. Sources were found by web search but couldn't be opened from
+the build session, so the reviewer should check every source link too.
+
+To add an article, append to `GUIDES`. The page, sitemap entry and
+"More guides" links are generated from it.
 
 ## Account deletion
 

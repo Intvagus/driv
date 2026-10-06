@@ -64,6 +64,9 @@ export default function TrackerLanding({ searchParams }: { searchParams: { delet
             <a href="#pricing" className="hidden text-slate-600 hover:text-rl-ink sm:inline">
               Pricing
             </a>
+            <Link href="/tracker/guides" className="hidden text-slate-600 hover:text-rl-ink sm:inline">
+              Guides
+            </Link>
             <Link href="/tracker/login" className="text-slate-600 hover:text-rl-ink">
               Sign in
             </Link>
