@@ -7,6 +7,32 @@ import { PHOTO_BUCKET } from "@/lib/tracker/config";
 // treatments, reminders and subscription record. The login itself is removed
 // too, unless it's also used on the clinic site (bookings or staff access),
 // in which case only the tracker data goes.
+async function listOwnPhotos(admin: ReturnType<typeof createTrackerAdminClient>, userId: string) {
+  const bucket = admin.storage.from(PHOTO_BUCKET);
+  const list = async (prefix: string) => {
+    const names: { name: string; isFolder: boolean }[] = [];
+    for (let offset = 0; ; offset += 1000) {
+      const { data, error } = await bucket.list(prefix, { limit: 1000, offset });
+      if (error) throw error;
+      // Folders come back with a null id.
+      names.push(...(data ?? []).map((o) => ({ name: o.name, isFolder: o.id === null })));
+      if (!data || data.length < 1000) return names;
+    }
+  };
+
+  const paths: string[] = [];
+  for (const entry of await list(userId)) {
+    if (!entry.isFolder) {
+      paths.push(`${userId}/${entry.name}`);
+      continue;
+    }
+    for (const file of await list(`${userId}/${entry.name}`)) {
+      if (!file.isFolder) paths.push(`${userId}/${entry.name}/${file.name}`);
+    }
+  }
+  return paths;
+}
+
 export async function POST() {
   let supabase;
   let user;
@@ -44,9 +70,17 @@ export async function POST() {
     }
   }
 
-  // 2. Photos in storage (rows referencing them are removed below).
-  const { data: photos } = await admin.from("tracker_photos").select("storage_path").eq("user_id", user.id);
-  const paths = (photos ?? []).map((p) => p.storage_path);
+  // 2. Photos in storage: everything under the user's own folder
+  //    (<user id>/<check-in id>/<file>), including files from uploads that
+  //    never got a row. Never paths taken from rows: the service role would
+  //    delete whatever a row points at.
+  let paths: string[];
+  try {
+    paths = await listOwnPhotos(admin, user.id);
+  } catch (err) {
+    console.error("Account delete: photo listing failed", err);
+    return NextResponse.json({ error: "Couldn't delete your photos. Please try again." }, { status: 500 });
+  }
   for (let i = 0; i < paths.length; i += 100) {
     const { error } = await admin.storage.from(PHOTO_BUCKET).remove(paths.slice(i, i + 100));
     if (error) {

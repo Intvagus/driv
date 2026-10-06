@@ -21,6 +21,9 @@ type LemonSqueezyEvent = {
   };
 };
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const LIVE_STATUSES = ["active", "on_trial", "past_due"];
+
 function validSignature(raw: string, signature: string | null, secret: string) {
   if (!signature) return false;
   const expected = Buffer.from(createHmac("sha256", secret).update(raw).digest("hex"), "utf8");
@@ -55,6 +58,7 @@ export async function POST(request: NextRequest) {
   // custom_data is set at checkout; fall back to an existing row for
   // events that arrive without it.
   let userId = event.meta.custom_data?.user_id;
+  if (userId && !UUID.test(userId)) userId = undefined;
   if (!userId) {
     const { data: existing } = await supabase
       .from("tracker_subscriptions")
@@ -66,6 +70,23 @@ export async function POST(request: NextRequest) {
   if (!userId) {
     console.error("Lemon Squeezy webhook: no user for subscription", subscriptionId);
     return NextResponse.json({ ignored: true });
+  }
+
+  // One row per user. If they cancelled and later bought a new
+  // subscription, late events about the old one must not overwrite the
+  // new one, so an event for a different subscription only replaces the
+  // row when it is itself live.
+  const { data: current } = await supabase
+    .from("tracker_subscriptions")
+    .select("ls_subscription_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (
+    current?.ls_subscription_id &&
+    current.ls_subscription_id !== subscriptionId &&
+    !LIVE_STATUSES.includes(attrs.status)
+  ) {
+    return NextResponse.json({ ignored: "superseded subscription" });
   }
 
   const { error } = await supabase.from("tracker_subscriptions").upsert(
@@ -83,6 +104,11 @@ export async function POST(request: NextRequest) {
     { onConflict: "user_id" }
   );
 
+  if (error?.code === "23503") {
+    // The user no longer exists (account deleted). Acknowledge, or Lemon
+    // Squeezy would retry this event indefinitely.
+    return NextResponse.json({ ignored: "unknown user" });
+  }
   if (error) {
     console.error("Lemon Squeezy webhook: upsert failed", error);
     return new NextResponse("Database error", { status: 500 });

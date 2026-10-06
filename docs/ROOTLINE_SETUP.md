@@ -73,6 +73,8 @@ and in Lemon Squeezy (actual charge) — keep them matching.
    preview who would be emailed:
    `curl -H "Authorization: Bearer $CRON_SECRET" "https://<your-domain>/api/tracker/reminders?dry=1"`
 5. **Clinic referrals**: run `supabase/migrations/004_rootline_referrals.sql`.
+   Then run `supabase/migrations/005_rootline_hardening.sql` (security fix; run
+   all migrations in number order).
 6. **Env vars** — see `.env.local.example`. `SUPABASE_SERVICE_ROLE_KEY` is
    required by the webhook and the reminder cron.
 
