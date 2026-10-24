@@ -27,7 +27,6 @@ rotating credentials outranks every item in this table until it's done.
 | Task | Bucket | Effort | Notes |
 |---|---|---|---|
 | Decide and document the migration/cutover plan: freeze the WordPress URL list, map every WP URL → new Next.js URL, write 301 redirects for anything that changes | 2 | M | This needs your decision on final URL structure, not just mine. I can generate the redirect map once you confirm slugs. |
-| Fill in real NAP data (`CLINIC_PHONE`, `CLINIC_EMAIL`, `CLINIC_ADDRESS`, `WHATSAPP_NUMBER`) in `lib/constants.ts` — must exactly match the Google Business Profile | 2 | S | Placeholder TODOs today; I can't invent real business data |
 | Re-authorize the Google Search Console connection (currently 403) | 2 | S | You'll need to run `connect_account` / reauthorize in the Porter/Search Console tool — I can't grant myself broader access |
 | Top up or confirm the DataForSEO/Porter credit balance if you want automated keyword/competitor/CWV research to keep running | 2 | S | Currently `NO_BALANCE` |
 | On cutover day: submit the new sitemap in GSC, use URL Inspection to request indexing on key pages, and monitor Search Console's Change of Address / coverage reports for a spike in 404s or dropped impressions | 2 | S | I can run the submission/inspection calls once GSC access is restored and you approve going live |
@@ -79,4 +78,11 @@ rotating credentials outranks every item in this table until it's done.
 
 ## Completed
 
-*(nothing yet — this plan was created 2026-09-11)*
+- **2026-10-24** — Filled in real NAP data (`CLINIC_PHONE`, `CLINIC_EMAIL`,
+  `CLINIC_ADDRESS`, `WHATSAPP_NUMBER`) in `lib/constants.ts`, sourced from
+  the clinic's own official knowledge base document rather than invented:
+  phone `+92 333 5010042`, WhatsApp `+92 332 5017478`, address `House 08,
+  Street 60, F-8/4, Islamabad, Pakistan` (email was already correct).
+  `npm run build` verified clean. This also unblocks the P1
+  `LocalBusiness`/`MedicalClinic` schema task below, which was explicitly
+  waiting on this.

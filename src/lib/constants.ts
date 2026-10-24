@@ -2,10 +2,10 @@ export const SITE_NAME = "Dr. Rana Irfan Hair Transplant Clinic";
 export const SITE_DESCRIPTION =
   "Premium hair restoration clinic in Islamabad, Pakistan. Expert FUE, DHI, Sapphire FUE hair transplant procedures by Dr. Rana Irfan.";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://drranairfan.com";
-export const WHATSAPP_NUMBER = "+923001234567"; // TODO: Replace with actual number
-export const CLINIC_PHONE = "+92-51-1234567"; // TODO: Replace with actual phone
-export const CLINIC_EMAIL = "info@drranairfan.com"; // TODO: Replace with actual email
-export const CLINIC_ADDRESS = "Blue Area, Islamabad, Pakistan"; // TODO: Replace with actual address
+export const WHATSAPP_NUMBER = "+92 332 5017478";
+export const CLINIC_PHONE = "+92 333 5010042";
+export const CLINIC_EMAIL = "info@drranairfan.com";
+export const CLINIC_ADDRESS = "House 08, Street 60, F-8/4, Islamabad, Pakistan";
 
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
