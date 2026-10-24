@@ -41,17 +41,21 @@ reads more naturally on the page.
     "https://ishrs.org/doctor/594807/",
     "https://www.imcas.com/en/profile/dr-rana-irfan-2",
     "https://www.linkedin.com/in/dr-rana-irfan-01806427/",
-    "https://facebook.com/ranairfandr/"
+    "https://facebook.com/ranairfandr/",
+    "https://www.instagram.com/hairtransplantisb/",
+    "https://www.youtube.com/@vagushairtransplant",
+    "https://x.com/RanaIrfanDr"
   ]
 }
 ```
 
-Instagram deliberately left out of this list — see the open conflict in
-`docs/seo/content/OP-01-author-bio-boxes.md` (IMCAS points to
-`doctorranairfan`, which `OFF-06`'s own evidence calls the wrong handle).
-Don't add either Instagram URL to schema until that's resolved — a
-`sameAs` entry is an assertion of identity, and asserting the wrong one
-is worse than leaving it out for now.
+Instagram/YouTube/X added 2026-10-24: the earlier conflict (IMCAS's icon
+pointing to `doctorranairfan` instead of `hairtransplantisb`) is now
+resolved — `hairtransplantisb` is confirmed the official account per the
+clinic's own official knowledge base document, and `doctorranairfan`
+looks like a stale link on IMCAS's own page (its icon URL is also
+technically broken there, a doubled URL). See `docs/seo/content/OP-01-author-bio-boxes.md`
+and `OFF-06` for the full resolution.
 
 ## Why this specific fix, not a Search Console request
 
