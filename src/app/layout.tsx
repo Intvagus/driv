@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/Toaster";
+import { JsonLd } from "@/components/layout/JsonLd";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
+import { medicalClinicSchema, physicianSchema } from "@/lib/schema";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -56,6 +58,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="antialiased">
+        <JsonLd data={medicalClinicSchema} />
+        <JsonLd data={physicianSchema} />
         {children}
         <Toaster />
       </body>

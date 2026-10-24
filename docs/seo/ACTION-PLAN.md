@@ -36,7 +36,7 @@ rotating credentials outranks every item in this table until it's done.
 | Task | Category | Bucket | Effort |
 |---|---|---|---|
 | Wire `/blog` and `/blog/[slug]` to the real `blog_posts` Supabase table (status=published, ordered by `published_at`), replacing the single hardcoded post | Content/Keyword | 1 | M |
-| Add JSON-LD structured data: `MedicalBusiness`/`MedicalClinic` + `Physician` on the homepage/about, `MedicalProcedure` on each procedure page, `FAQPage` on `/faqs`, `BreadcrumbList` site-wide, `BlogPosting` on blog posts | Schema | 1 | M |
+| ~~Add `MedicalClinic` + `Physician` JSON-LD~~ — **done 2026-10-24**, site-wide (see Completed). Still open: `MedicalProcedure` on each procedure page, `FAQPage` on `/faqs`, `BreadcrumbList` site-wide, `BlogPosting` on blog posts | Schema | 1 | M |
 | Add `alternates.canonical` to every page's metadata, and give the root `openGraph`/`twitter` blocks a real default share image | Technical/On-page | 1 | S |
 | Rewrite title templates to stay under ~60 chars and descriptions under ~155, per page type (procedure, condition, blog) | On-page | 1 | S |
 | Fix the two dead footer links: either build `/privacy` and `/terms` (needed anyway — the site collects PII in `consultation_leads`/`bookings`) or remove the links until they exist | Technical / Trust | 1 | S |
@@ -51,7 +51,6 @@ rotating credentials outranks every item in this table until it's done.
 | Real photography/video: doctor portrait, clinic photos, consented before/after galleries, procedure walkthroughs — replace every gradient placeholder | Image/Video SEO | 3 | L — needs a shoot, not code |
 | Once real images exist: convert to `next/image`, write descriptive alt text per image (procedure + angle + technique, not generic "before/after"), serve via Supabase storage `gallery`/`blog-images` buckets already defined in the schema | Image/Video SEO | 1 | M |
 | Local SEO: verify/complete the Google Business Profile (categories, services list, Q&A seeding, photo uploads, review response cadence) | Local SEO | 3 | — no GBP connector available; needs manual GBP admin access |
-| Build a `LocalBusiness`/`MedicalClinic` schema block with real geo-coordinates, opening hours, and `sameAs` once NAP + socials are final | Local SEO / Schema | 1 | S (blocked on P0 NAP task) |
 | Competitor content-gap analysis (Royce Clinic, HairnHair, JJ Aesthetics — the local-pack competitors found in this audit) to pick blog topics with real search demand | Content/Keyword | 2 | M — DataForSEO action, costs credits |
 | Full technical site crawl of the live WordPress site before decommissioning it, to make sure the redirect map (P0) has 100% URL coverage | Technical | 1 (once credits restored) | M |
 
@@ -83,6 +82,16 @@ rotating credentials outranks every item in this table until it's done.
   the clinic's own official knowledge base document rather than invented:
   phone `+92 333 5010042`, WhatsApp `+92 332 5017478`, address `House 08,
   Street 60, F-8/4, Islamabad, Pakistan` (email was already correct).
-  `npm run build` verified clean. This also unblocks the P1
-  `LocalBusiness`/`MedicalClinic` schema task below, which was explicitly
-  waiting on this.
+  `npm run build` verified clean. This unblocked the schema task below.
+- **2026-10-24** — Built the `MedicalClinic` + `Physician` JSON-LD schema
+  block (`src/lib/schema.ts`, `src/components/layout/JsonLd.tsx`, wired
+  site-wide in `src/app/layout.tsx`). Real geo-coordinates (33.7113397,
+  73.0464433) and the live aggregate rating (4.8 / 636 reviews) pulled
+  directly from the clinic's actual Google Business Profile listing via a
+  DataForSEO lookup, not estimated. See `docs/seo/content/OP-11-business-schema.md`
+  for the full source-by-field breakdown and two flagged discrepancies
+  (a phone-number mismatch between the GBP listing and the knowledge
+  base, and an unconfirmed "IBHRS Vice President" credential surfacing
+  in GBP's own self-published services text). `npm run build` verified —
+  valid JSON rendered on every page. `MedicalProcedure`/`FAQPage`/
+  `BreadcrumbList`/`BlogPosting` schema remain open, tracked in P1 above.
