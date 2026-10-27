@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.prose-lite h2 { @apply mt-8 text-xl font-bold; }
+.prose-lite h3 { @apply mt-6 font-semibold; }
+.prose-lite p { @apply mt-3 leading-relaxed text-slate-700; }
+.prose-lite ul { @apply mt-3 list-disc space-y-1 ps-6 text-slate-700; }
+.prose-lite ol { @apply mt-3 list-decimal space-y-1 ps-6 text-slate-700; }
+.prose-lite a { @apply font-medium text-brand underline; }
+.prose-lite table { @apply mt-3 w-full text-sm; }
+.prose-lite th { @apply border-b border-line py-2 text-start font-semibold; }
+.prose-lite td { @apply border-b border-line py-2; }
