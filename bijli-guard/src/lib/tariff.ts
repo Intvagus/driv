@@ -2,7 +2,9 @@
 //
 // SOURCE AND CONFIDENCE: the slab rates below are the uniform tariff from
 // S.R.O. 279(I)/2026 (NEPRA decision of 11 Feb 2026), as reproduced by
-// several independent tariff summaries. NEPRA's own site could not be read
+// several independent tariff summaries. The 1–200 unit protected and
+// unprotected rates also match news reporting of that decision; the upper
+// slabs and fixed charges come from tariff summaries only. NEPRA's own site could not be read
 // when this was written, and summaries disagree on some figures, so every
 // value is shown to the user and can be overridden from their own bill.
 // Update this file (and TARIFF.lastReviewed) whenever NEPRA notifies changes.
@@ -48,8 +50,12 @@ export const TARIFF = {
 
   // Monthly fuel charge adjustment and quarterly adjustment (Rs/unit).
   // These change often: users should copy the figure from their bill.
-  fca: { perUnit: 2.0581, label: "July 2026 FCA (on Sept 2026 bills)" },
-  qta: { perUnit: 0.5194, label: "Apr–Jun 2026 quarterly adjustment" },
+  // FCA: NEPRA decision for August 2026 consumption, billed in October 2026
+  // (reported by Express Tribune and Dawn). The September 2026 FCA was still
+  // pending (DISCOs sought Rs 2.5624) as of the review date.
+  fca: { perUnit: 1.1086, label: "August 2026 FCA (on October 2026 bills)" },
+  // QTA: Apr–Jun 2026 quarterly adjustment, applied Sep–Nov 2026.
+  qta: { perUnit: 0.5194, label: "Apr–Jun 2026 quarterly adjustment (Sep–Nov 2026 bills)" },
 
   gstPercent: 18,
 } as const;
