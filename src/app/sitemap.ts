@@ -1,5 +1,7 @@
 import { MetadataRoute } from "next";
 import { SITE_URL, PROCEDURES, CONDITIONS } from "@/lib/constants";
+import { TRACKER_PUBLIC_PATHS } from "@/lib/tracker/public-paths";
+import { TRACKER_OWN_DOMAIN } from "@/lib/tracker/urls";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
@@ -34,5 +36,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...procedurePages, ...conditionPages];
+  // Rootline's public pages, unless it has its own domain (then they're in
+  // that domain's /sitemap.xml instead).
+  const trackerPages = TRACKER_OWN_DOMAIN
+    ? []
+    : TRACKER_PUBLIC_PATHS.map((path) => ({
+        url: `${SITE_URL}${path}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly" as const,
+        priority: path === "/tracker" ? 0.9 : 0.6,
+      }));
+
+  return [...staticPages, ...procedurePages, ...conditionPages, ...trackerPages];
 }

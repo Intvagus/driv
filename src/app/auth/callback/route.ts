@@ -5,7 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/account";
+  // Only same-site paths: "//evil.com" or "@evil.com" appended to the
+  // origin would send the user to another site after signing in.
+  const requested = searchParams.get("next") ?? "/account";
+  const next = /^\/(?![/\\])/.test(requested) ? requested : "/account";
 
   if (code) {
     const cookieStore = await cookies();
